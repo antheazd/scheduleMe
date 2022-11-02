@@ -1,0 +1,31 @@
+[package]
+name = "rocket"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { version = "0.5.0-rc.2", features = ["secrets", "json"] }
+serde = { version = "1.0", features = ["derive"] }
+diesel = { version = "2.0.2", features = ["postgres"] }
+
+[dependencies.rocket_db_pools]
+version = "0.1.0-rc.2"
+features = ["sqlx_postgres"]
+
+[global.databases.webappdb]
+url = "postgres://postgres:rocket@localhost:5435/webappdb"
+
+#[default.databases.webappdb]
+#url = "postgres://postgres:rocket@localhost:5435/webappdb"
+
+#[default.databases.rocket]
+#ROCKET_DATABASES={webappdb={url="postgres://postgres:rocket@localhost:5435/webappdb"}}
+
+
+
+
+
+
+
