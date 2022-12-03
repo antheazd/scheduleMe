@@ -1,7 +1,7 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    todo (id) {
+    users (id) {
         id -> Int4,
         name -> Varchar,
         surname -> Varchar,
