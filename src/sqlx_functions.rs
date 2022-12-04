@@ -7,6 +7,7 @@ use rocket_dyn_templates::Template;
 use rocket_dyn_templates::context;
 use rocket::response::Redirect;
 use crate::components::user as user;
+use crate::components::admin as admin;
 
 #[derive(Database)]
 #[database("webappdb")]
@@ -189,7 +190,15 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
                                         let name: Option<String> = id_result.get("name");
                                         let surname: Option<String> = id_result.get("surname");
                                         let email: String = id_result.get("email");
-                                        create_cookies(id, name, surname, email, cookies)
+                                        create_cookies(id, name, surname, email, cookies);
+                                        return 
+                                            Template::render("index", context! {
+                                                message: "Success",
+                                                username: user.get_name(),
+                                                usersurname: user.get_surname(),
+                                                usermail: user.get_email(),
+                                                userpassword: user.get_password()})
+
                                     }
                                     Err(e) =>{
                                         println!("{e}")
@@ -224,11 +233,82 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
         message: message,
     })
 } 
-
+//admin
 #[post("/adminpanel")]
 pub fn adminpanel() -> Template {
     Template::render("admin", context! {
         message: "",
     })
 
+}
+
+#[get("/adminpanel")]
+pub async fn adminpanelget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
+    if cookies.get_private("id").is_some(){
+        return Ok(Template::render("adminpanel", context! {}))
+    }
+    Err(Redirect::to(uri!(adminlogin())))
+}
+
+#[get("/adminlogin")]
+pub fn adminlogin() -> Template {
+    Template::render("adminlogin", context! {
+        message: "",
+    })
+}
+
+
+#[post("/adminlogin", data = "<admin>")]
+pub async fn adminloginfn(admin: Form<admin::Admin>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Template{
+
+    let mut _message: String = "".to_string();
+    let existing_admins = sqlx::query(r#"select * from admins where email= $1"#)
+        .bind(admin.get_email())
+        .bind(admin.get_password())
+        .fetch_one(&mut *db)
+        .await;
+    
+        match existing_admins{
+            Ok(data) => {
+                let id: Option<i32> = data.get("id");
+                let name: Option<String> = data.get("name");
+                let surname: Option<String> = data.get("surname");
+                let email: String = data.get("email");
+                let password: String = data.get("password");
+                if password == admin.get_password().as_str(){
+
+                        println!("Success");
+                        _message = "Success".to_string();
+
+                        create_cookies(id, name, surname, email, cookies);
+                        return 
+                            Template::render("adminpanel", context!{message: _message})
+                }
+                else{
+                    _message = "Incorrect password".to_string();
+                    return Template::render("adminlogin", context!{message: _message})
+                }
+            }
+            Err(err) => {
+                match err{
+                    Error::RowNotFound => {
+                        _message = String::from("No admins found with this email");
+                    }
+                    _ => {
+                        _message = String::from("Trouble connecting to database");
+                        println!("{}", err);
+                    }
+                }
+            }
+    } 
+        Template::render("adminlogin", context! {
+            message: _message,
+        })
+
+}
+
+#[get("/adminlogout")]
+pub fn adminlogout(cookies: &CookieJar<'_>) -> Redirect {
+    remove_cookies(cookies);
+    Redirect::to(uri!(adminlogin()))
 }

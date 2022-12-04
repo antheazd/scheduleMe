@@ -1,5 +1,8 @@
-/*#[derive(FromForm, Debug)]
-struct Admin{
+use serde::{Serialize, Deserialize};
+
+
+#[derive(FromForm, Debug, Serialize, Deserialize, Clone)]
+pub struct Admin{
     id: Option<i64>,
     name: Option<String>,
     surname: Option<String>,
@@ -29,4 +32,4 @@ impl Admin{
              password
      }}
     } 
-    */
+    
