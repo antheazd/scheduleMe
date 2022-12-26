@@ -1,4 +1,5 @@
 {% extends "base" %}
 {% block content %}
-<p>This is a index page .</p>
+<div id="root"></div>
+<script type="module" src="./index.js"></script>
 {% endblock content %}

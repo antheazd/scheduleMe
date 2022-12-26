@@ -1,3 +1,12 @@
 {% extends "base" %}
 {% block content %}
+
+<div class="full_page">
+    <div class="table_div">
+        <div id="appointment"></div>
+        <div id="schedule"></div>
+    </div>
+</div>
+<script src="static/schedule.js" type="text/babel"></script>
+<script src="static/appointment.js" type="text/babel"></script>
 {% endblock content %}

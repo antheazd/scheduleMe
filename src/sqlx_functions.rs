@@ -1,4 +1,3 @@
-//use components::admin as admin;
 use rocket::http::{Cookie, CookieJar};
 use rocket_db_pools::{Database, Connection};
 use rocket_db_pools::sqlx::{self, Row, Error};
@@ -8,6 +7,7 @@ use rocket_dyn_templates::context;
 use rocket::response::Redirect;
 use crate::components::user as user;
 use crate::components::admin as admin;
+//use crate::components::appointment as appointment;
 
 #[derive(Database)]
 #[database("webappdb")]
@@ -27,6 +27,7 @@ pub fn remove_cookies(cookies: &CookieJar<'_>){
     cookies.remove_private(Cookie::named("email"));
 }
 
+
 #[catch(404)]
 pub fn not_found() -> Template {
     Template::render("", context! {})
@@ -34,13 +35,17 @@ pub fn not_found() -> Template {
 
 #[post("/")]
 pub fn index() -> Template {
-    Template::render("index", context!{})
+    Template::render("schedule", context!{
+        place: "kastav",
+        time: "10-11"})
 }
 
 #[get("/")]
 pub async fn indexget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     if cookies.get_private("id").is_some(){
-        return Ok(Template::render("index", context! {}))
+        return Ok(Template::render("schedule", context! {
+            place: "kastav",
+            time: "10-11"}))
     }
     Err(Redirect::to(uri!(login())))
 }
@@ -65,7 +70,9 @@ pub async fn chat(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
 #[get("/schedule")]
 pub async fn schedule(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     if cookies.get_private("id").is_some(){
-        return Ok(Template::render("schedule", context! {}))
+        return Ok(Template::render("schedule", context! {
+            place: "kastav",
+            time: "10-11"}))
     }
     Err(Redirect::to(uri!(login())))
 }
@@ -109,7 +116,8 @@ pub async fn loginfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: 
 
                 create_cookies(id, name, surname, email, cookies);
                 return 
-                    Template::render("index", context!{message: _message})
+                    Template::render("schedule", context!{message: _message, place: "kastav",
+                    time: "10-11"})
                 }
                 else{
                     _message = "Incorrect password".to_string();
@@ -192,12 +200,14 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
                                         let email: String = id_result.get("email");
                                         create_cookies(id, name, surname, email, cookies);
                                         return 
-                                            Template::render("index", context! {
+                                            Template::render("schedule", context! {
                                                 message: "Success",
                                                 username: user.get_name(),
                                                 usersurname: user.get_surname(),
                                                 usermail: user.get_email(),
-                                                userpassword: user.get_password()})
+                                                userpassword: user.get_password(),
+                                                place: "kastav",
+                                                time: "10-11"})
 
                                     }
                                     Err(e) =>{
@@ -220,12 +230,14 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
 
     if success {
         return 
-        Template::render("index", context! {
+        Template::render("schedule", context! {
             message: "Success",
             username: user.get_name(),
             usersurname: user.get_surname(),
             usermail: user.get_email(),
-            userpassword: user.get_password()
+            userpassword: user.get_password(),
+            place: "kastav",
+            time: "10-11"
         })
     }
 
@@ -245,7 +257,8 @@ pub fn adminpanel() -> Template {
 #[get("/adminpanel")]
 pub async fn adminpanelget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     if cookies.get_private("id").is_some(){
-        return Ok(Template::render("adminpanel", context! {}))
+        return Ok(Template::render("adminpanel", 
+            context! {}))
     }
     Err(Redirect::to(uri!(adminlogin())))
 }
