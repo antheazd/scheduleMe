@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
       <div className="full_page">
       <div className="half_page">
       <div className="ui center aligned container"> 
-        <div className="center"><img src="static/logo.png" className="ui small image"/></div>
+        <div className="center"><img src="static/scheduleMe.png" className="ui small image"/></div>
           <form className="ui form" method="post">
           <div className="field">
               <label>Email address</label>
