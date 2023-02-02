@@ -3,7 +3,6 @@
 
 <script>
     var context = {{ appointments }};
-    var d = "HHH";
 </script>
 
 <div class="full_page">
@@ -15,8 +14,6 @@
     </div>
 </div>
 
-<!-- <script src="static/schedule.js" type="text/babel"></script>
-<script src="static/appointment.js" type="text/babel"></script> -->
 <script src="static/complete_schedule.js" type="text/babel"></script>
 <script src="static/add_appointment.js" type="text/babel"></script>
 {% endblock content %}
