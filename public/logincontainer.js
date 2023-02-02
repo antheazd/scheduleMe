@@ -15,5 +15,6 @@ class LoginContainer extends React.Component {
     );}
 }
 
-let domContainer = document.querySelector('#logincontainer');
-ReactDOM.render(<LoginContainer />, domContainer);
+let container = document.getElementById('login_container');
+const root = ReactDOM.createRoot(container);
+root.render(<LoginContainer />, domContainer);

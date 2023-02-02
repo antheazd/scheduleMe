@@ -1,12 +1,23 @@
 {% extends "base" %}
 {% block content %}
 
+<script>
+    var context = {{ appointments }};
+    var d = "HHH";
+</script>
+
 <div class="full_page">
-    <div class="table_div">
-        <div id="appointment"></div>
-        <div id="schedule"></div>
+    <div class="table_div" id="table">
+        <div id="add_appointment"></div>
+
+        
+        <div id="complete_schedule"></div>
     </div>
 </div>
-<script src="static/schedule.js" type="text/babel"></script>
-<script src="static/appointment.js" type="text/babel"></script>
+
+<!-- <script src="static/schedule.js" type="text/babel"></script>
+<script src="static/appointment.js" type="text/babel"></script> -->
+<script src="static/complete_schedule.js" type="text/babel"></script>
+<script src="static/add_appointment.js" type="text/babel"></script>
 {% endblock content %}
+

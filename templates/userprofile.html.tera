@@ -1,3 +1,8 @@
 {% extends "base" %}
 {% block content %}
+<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8&sensor=false&libraries=places"></script> -->
+<!-- druga <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&language=nl&output=json&key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8" async defer></script> --> 
+
+<div id="userprofile"></div>
+<script type="text/babel" src="static/profile.js"></script>
 {% endblock content %}

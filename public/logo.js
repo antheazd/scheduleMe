@@ -1,6 +1,6 @@
 'use strict';
 
-class Navbar extends React.Component {
+class Logo extends React.Component {
   constructor(props) {
     super(props);
   }
