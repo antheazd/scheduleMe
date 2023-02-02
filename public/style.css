@@ -89,6 +89,7 @@ table.customTable {
     border-color: #000000;
     overflow: hidden;
     border-width: 0.5px;
+    font-weight: 700;
   }
 
   .ui.cards{
@@ -97,11 +98,26 @@ table.customTable {
     width: 13.5%;
     height: 13.32%; 
     right: 0.1%;
-    top: 9.32%;
+    top: 14.53%;
+    font-size: 1vw;
   }
 .blue{
   background-color: #2185d0;
 }
 .ui.celled.fixed.single.line.table{
   text-align: center;
+}
+
+.ui.center.aligned.container{
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 350;
+}
+.ui.pagination.menu{
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }

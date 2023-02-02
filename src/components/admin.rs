@@ -11,6 +11,9 @@ pub struct Admin{
 }
 
 impl Admin{
+    pub fn get_id(&self)-> &Option<i64>{
+        &self.id
+    }
     pub fn get_name(&self)-> &Option<String>{
         &self.name
     }

@@ -6,8 +6,9 @@ pub struct User{
     name: Option<String>,
     surname: Option<String>,
     email: String,
-    password: String
+    password: String,
 }
+
 impl User{
     pub fn get_id(&self) -> &Option<i64>{
         &self.id
@@ -25,12 +26,12 @@ impl User{
         &self.password
     }
     
-    /*pub fn new(id: Option<i64>, name: Option<String>, surname: Option<String>, email: String, password: String)-> User {
-        User{ 
+    pub fn new(id: Option<i64>, name: Option<String>, surname: Option<String>, email: String, password: String)-> Self {
+        Self{ 
              id,
              name,
              surname,
              email,
              password
-     }} */
+     }} 
     }

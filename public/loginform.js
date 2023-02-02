@@ -37,5 +37,6 @@ class LoginForm extends React.Component {
     );}
 }
 
-let domContainer1 = document.querySelector('#loginform');
-ReactDOM.render(<LoginForm />, domContainer1);
+let container = document.getElementById('loginform');
+const root = ReactDOM.createRoot(container);
+root.render(<LoginForm />);
