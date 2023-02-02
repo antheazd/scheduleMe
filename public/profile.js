@@ -32,16 +32,25 @@ class Profile extends React.Component {
       <div className="full_page">
         <div className="half_page">
           <div className="center">
-            <img src="https://react.semantic-ui.com/images/wireframe/square-image.png" className="ui medium circular image"/>
+            <img src="static/user.png" className="ui medium circular image"/>
+
+
+            <h3 className="ui header"> Name</h3>
+            {window.context[0].name} {window.context[0].surname}
+            <div className="ui hidden divider"></div>
+
+            <h3 className="ui header">Email</h3>
+            {window.context[0].email}
+            <div className="ui hidden divider"></div>
 
             <form className="ui form" method="post">
               <div className="field">
-                    <label>Location</label>
+                    <h3>Location</h3>
                   <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder="Anything you want!"/>
               </div>
                   <input type="hidden"  id="alt" name="alt"/>
                   <input type="hidden" id="lng" name="lng"/>
-              <button className="ui blue button">Submit</button>
+              <button className="ui blue button">Change location</button>
             </form>
           </div>
         </div>
