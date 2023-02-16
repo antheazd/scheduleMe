@@ -12,6 +12,7 @@
   </head>
   <body>
       <div id="loginform" type="text/babel"></div>
+      
       <script src="static/button.js" type="text/babel"></script>
       <script src="static/loginform.js" type="text/babel"></script>
   </body>

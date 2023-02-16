@@ -1,18 +1,5 @@
 'use strict';
 
-/*class Button extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    
-    return (
-      <a className="item" href="/logout"><button className="ui primary button">Log in</button></a>
-    );}
-} */
-
-
 class LoginForm extends React.Component {
 
   render() {
@@ -38,7 +25,7 @@ class LoginForm extends React.Component {
                     <Button label="Log in"/>
                 </form>
                 <div className="ui warning bottom attached message">
-                    <i aria-hidden="true" className="help icon"></i>Don't have an account? <a href="/login">Sign up</a> here instead.
+                    <i aria-hidden="true" className="help icon"></i>Don't have an account? <a href="/signup">Sign up here</a> instead.
                 </div>
       </div>
   
