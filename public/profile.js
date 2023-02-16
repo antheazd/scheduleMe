@@ -6,7 +6,7 @@ class Profile extends React.Component {
     super(props);
 
     const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&language=nl&output=json&key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8";
+    script.src = "https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&language=hr&output=json&key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8";
     script.async = true;
     document.body.appendChild(script);
   }
@@ -30,31 +30,36 @@ class Profile extends React.Component {
   render() {
     return (
       <div className="full_page">
-        <div className="half_page">
-          <div className="center">
-            <img src="static/user.png" className="ui medium circular image"/>
-
-
-            <h3 className="ui header"> Name</h3>
-            {window.context[0].name} {window.context[0].surname}
-            <div className="ui hidden divider"></div>
-
-            <h3 className="ui header">Email</h3>
-            {window.context[0].email}
-            <div className="ui hidden divider"></div>
-
-            <form className="ui form" method="post">
-              <div className="field">
-                    <h3>Location</h3>
-                  <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder="Anything you want!"/>
+        <div className="profile_container">
+          <div className="ui items">
+          <div className="item">
+              <div className="ui medium circular image">
+              <img src="static/photos/user.png" className="ui medium circular image"/>
               </div>
-                  <input type="hidden"  id="alt" name="alt"/>
-                  <input type="hidden" id="lng" name="lng"/>
-              <button className="ui blue button">Change location</button>
-            </form>
+              <div className="content">
+                <h3 className="ui header"> Name</h3><br></br>
+                  {window.context[0].name} {window.context[0].surname}
+                <div className="ui hidden divider"></div>
+                
+                <h3 className="ui header">Email</h3><br></br>
+                  {window.context[0].email}
+                <div className="ui hidden divider"></div>
+
+                <form className="ui form" method="post">
+                        <div className="field">
+                              <h3>Location</h3>
+                            <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder="Anything you want!"/>
+                        </div>
+                            <input type="hidden"  id="alt" name="alt"/>
+                            <input type="hidden" id="lng" name="lng"/>
+                        <button className="ui blue button">Change location</button>
+                </form>
+            </div>
+          </div>
           </div>
         </div>
       </div>
+
     );  
     }
 }

@@ -16,6 +16,7 @@
   <body>
   <div id="navbar" type="text/babel"></div>
   {% block content %}{% endblock content %}
+  <script src="static/button.js" type="text/babel"></script>
   <script src="static/navbar.js" type="text/babel"></script>
 </body>
 </html>

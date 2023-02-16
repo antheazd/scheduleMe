@@ -142,7 +142,6 @@ class AddAppointment extends React.Component {
                       </div>  
 
                       <button className="ui blue button">Submit</button>
-                      <button className="ui red button" onClick={this.updateState}>Cancel</button>
                   </form>
                   </div>
                 
