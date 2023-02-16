@@ -10,18 +10,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
-<body>
-          <div id="loginform" type="text/babel"></div>
-
-    {% block content %}
-        {% if message %}
-          <div id="message" type="text/babel"></div>
-        {% endif %}
-    {% endblock content %}
-
-    <script src="static/loginform.js" type="text/babel"></script>
-    <script src="static/loginform.js" type="text/babel"></script>
-    <script src="static/segment.js" type="text/babel"></script>
-    <script src="static/message.js" type="text/babel"></script> 
-</body>
+  <body>
+      <div id="loginform" type="text/babel"></div>
+      
+      <script src="static/Button.js" type="text/babel"></script>
+      <script src="static/loginform.js" type="text/babel"></script>
+  </body>
 </html>

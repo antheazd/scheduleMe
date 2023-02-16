@@ -11,20 +11,7 @@ class Button extends React.Component {
       <a className="item" href="/logout"><button className="ui primary button">Log in</button></a>
     );}
 }
-
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    
-    return (
-      <a className="item" href="/logout"><button className="ui primary button">Log in</button></a>
-    );}
-}
-
-
+/*
 class LoginForm extends React.Component {
   render() {
     
@@ -50,3 +37,4 @@ class LoginForm extends React.Component {
 let domContainer1 = document.querySelector('#loginform');
 ReactDOM.render(<LoginForm />, domContainer1);
 
+*/

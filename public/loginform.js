@@ -1,7 +1,6 @@
 'use strict';
 
-
-class Button extends React.Component {
+/*class Button extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -11,7 +10,7 @@ class Button extends React.Component {
     return (
       <a className="item" href="/logout"><button className="ui primary button">Log in</button></a>
     );}
-}
+} */
 
 
 class LoginForm extends React.Component {
