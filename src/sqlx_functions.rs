@@ -194,7 +194,31 @@ pub async fn schedule(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Resu
             for i in &appointments{
                 println!("{:?}", i);
             }
-            return Ok(Template::render("schedule", context!{appointments: appointments})) //appointments: appointments}))
+
+            let user_id = id.value().to_string().parse::<i64>().unwrap();
+            let user_info = sqlx::query(r#"SELECT alt, lng FROM locations WHERE user_id = $1;"#)
+                .bind(user_id)
+                .fetch_one(&mut *db)
+                .await
+                .unwrap();
+
+                let alt_value: f64 = user_info.get("alt");
+                let lng_value: f64 = user_info.get("lng");
+
+                let mut coordinates: Vec<String> = Vec::new();
+
+                let mut coordinates_str: String = String::new(); 
+
+                coordinates_str.push('{');
+                let coord_str = format!("\"alt\": {}, \"lng\": {}", alt_value.to_string(), lng_value.to_string());
+                coordinates_str.push_str(&coord_str);
+                coordinates_str.push('}');
+
+                coordinates.push(coordinates_str);
+
+
+
+            return Ok(Template::render("schedule", context!{appointments: appointments, coordinates: coordinates}));
         } 
         _ => {
             Err(Redirect::to(uri!(login())))
@@ -361,7 +385,7 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
                                         let email: String = id_result.get("email");
                                         create_cookies(id, name, surname, email, cookies);
                                         return 
-                                            Ok(Redirect::to(uri!(schedule)));
+                                            Ok(Redirect::to(uri!(userprofile)));
 
                                     }
                                     Err(e) =>{
@@ -384,7 +408,7 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
 
     if success {
         return 
-        Ok(Redirect::to(uri!(schedule)));
+        Ok(Redirect::to(uri!(userprofile)));
     }
 
     Err(Template::render("signup", context! {
