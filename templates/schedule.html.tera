@@ -1,8 +1,12 @@
 {% extends "base" %}
 {% block content %}
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8&callback=initMap">
+</script>
 
 <script>
     var context = {{ appointments }};
+    var coordinates = {{ coordinates }};
 </script>
 
 <div class="full_page">
@@ -14,6 +18,7 @@
     </div>
 </div>
 
+<div id = "duration"></div>
 <script src="static/complete_schedule.js" type="text/babel"></script>
 <script src="static/add_appointment.js" type="text/babel"></script>
 {% endblock content %}

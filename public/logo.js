@@ -7,7 +7,7 @@ class Logo extends React.Component {
 
   render() {
     <div>
-        <img src="static/logo.png" class="ui avatar image"/>
+        <img src="static/scheduleMe.png" class="ui avatar image"/>
     </div>
   }
 }

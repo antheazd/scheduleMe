@@ -1,5 +1,6 @@
 'use strict';
 'use axios';
+//import Schedule from './schedule'
 
 // Schedule Table 
 class Schedule extends React.Component {
@@ -204,12 +205,12 @@ class Appointment extends React.Component {
     return day.getDate() - monday.getDate();
   }
 
-  height(duration){
+  appointment_height(duration){
     console.log(duration);
     if(duration == "1h") return '15.57%';
     else if(duration == "45min") return '11.69%';
     else if(duration == "2h") return '30.16%';
-    return '8.55%';
+    return '0%';
   }
 
   right(day){
@@ -227,7 +228,6 @@ class Appointment extends React.Component {
     return position + '%';
   }
 
-  
   end_time(duration, start_hour, start_minute){
 
     var end_hour = parseInt(start_hour, 10);
@@ -255,18 +255,132 @@ class Appointment extends React.Component {
         end_minute = Number(( 45 - (60 - start_minute) )); 
       }
     }
+    else{
+      var hours = parseInt((duration.toString().slice(0, 2)), 10);
+      var minutes = parseInt((duration.toString().slice(3, 2)), 10);
+      end_hour += hours;
+
+      if(start_minute + minutes >= 60){
+        end_minute = ( start_minute + minutes  ) - 60;
+        end_hour++;
+      }
+      else{
+        end_minute = start_minute + minutes;
+      }
+    }
     return end_hour + ':' + end_minute;
   }
 
+  
   render() {
     return (
-        <div className="ui cards" style={{ height: this.height(this.props.duration), right: this.right(this.props.day), top: this.top(this.props.start_hour, this.props.start_minute)}}><div className="ui card" ><div className="header">{ this.props.start_hour }:{ this.props.start_minute } - { this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }</div></div></div>
+      <div>
+        <div className="ui cards" style={{ height: this.appointment_height(this.props.duration), right: this.right(this.props.day), top: this.top(this.props.start_hour, this.props.start_minute)}}><div className="ui card" ><div className="header">{ this.props.start_hour }:{ this.props.start_minute } - { this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }</div></div></div>
+        <Separator extra_weeks={this.props.extra_weeks} start_time={this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)} alt={this.props.alt} lng={this.props.lng} day={this.props.day} right={this.right(this.props.day)} top={this}
+                   extra_days={this.extra_days} end_time={this.end_time} 
+        />
+      </div>
+    );}
+}
 
+//separator cards
+class Separator extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      duration: 0
+    };
+    this.callback = this.callback.bind(this);
+    this.boundCallback = this.callback.bind(this);
+  }
+
+  separator_top(start_time){
+    var hour = parseInt((start_time.slice(0, 2)), 10);
+    var minute = parseInt((start_time.slice(3, 4)), 10);
+    console.log("start", hour, minute);
+    var position =  18.25 + 7.5 * ((hour - 8) + (minute / 60));
+    return  position + '%';
+  }
+
+  separator_height(){
+    var seconds = parseInt(this.state.duration);
+
+    var hour = Math.floor(seconds / 216000);
+    seconds -= hour * 3600;
+    var minute = Math.ceil(seconds / 3600);
+
+    console.log("h min", hour, minute);
+    return ((hour +  (minute / 60)) * 15.57) + '%';
+  }
+
+  componentDidMount() {
+      const origin = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].alt));
+      const destination = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
+
+      var service = new window.google.maps.DistanceMatrixService();
+
+      service.getDistanceMatrix(
+      {
+          origins: [origin],
+          destinations: [destination],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          avoidHighways: false,
+          avoidTolls: false,
+          unitSystem: window.google.maps.UnitSystem.IMPERIAL
+        }, 
+        this.callback
+      );
+  }
+    
+  
+  callback(response, status) {
+     if (status === 'OK') {
+      this.setState({duration: response.rows[0].elements[0].duration.value});
+      console.log("seconds ", this.state.duration);
+    } else {
+      console.error('Error:', status);
+    }
+  }
+
+
+  end_time(){
+    var hour = parseInt(this.props.start_time.substring(0, this.props.start_time.indexOf(':')));
+    var minute = parseInt(this.props.start_time.substring(this.props.start_time.indexOf(':') + 1, this.props.start_time.length));
+
+    var seconds = parseInt(this.state.duration);
+
+    var duration_hour = Math.floor(seconds / 216000);
+    seconds -= (duration_hour * 216000);
+    var duration_minute = Math.ceil(seconds / 3600);
+
+    hour += duration_hour;
+    minute += duration_minute;
+
+    if(minute >= 60) {
+      hour ++;
+      minute -= 60;
+    }
+
+    return hour + ':' + minute;
+  }
+
+  
+  render() {
+    return (
+      <div>
+        <div className="ui cards" style={{ height: this.separator_height(), right:this.props.right, top: this.separator_top(this.props.start_time)}}>
+          <div className="ui card grey" >
+            <div className="header grey">{ this.props.start_time } - { this.end_time() }</div>
+          </div>
+        </div>
+      </div>
     );}
 }
 
 //parent class
 class CompleteSchedule extends React.Component{
+
     constructor() {
         super();
         this.state = {
@@ -278,7 +392,7 @@ class CompleteSchedule extends React.Component{
 
     nextWeek(){ 
             var z = this.state.extra_weeks + 1;
-            this.setState({extra_weeks: z}) 
+            this.setState({extra_weeks: z});
             console.log("extra_weeks", this.state.extra_weeks);
               }
         
@@ -293,7 +407,6 @@ class CompleteSchedule extends React.Component{
     render(){
                 return(
                     <div>
-                        <Appointment extra_weeks={this.state.extra_weeks} start_hour="8" start_minute="0" place="Kastav" duration="1h" alt="0" lng="0"/>
                         <Schedule extra_weeks={this.state.extra_weeks}/>
                         <br></br>
                         <div aria-label="Pagination Navigation" role="navigation" className="ui pagination menu">
@@ -303,7 +416,9 @@ class CompleteSchedule extends React.Component{
 
                         <ul>
                           {window.context.map(i => 
-                            <Appointment extra_weeks={this.state.extra_weeks} key={i.appointment_id} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} />
+                            <div  key = {i.appointment_id}>
+                                <Appointment extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} />
+                            </div>
                             )}
                         </ul>
 

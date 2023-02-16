@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-
 use rocket::futures::TryFutureExt;
 use rocket::http::{Cookie, CookieJar};
 use rocket::serde::json;
@@ -54,11 +53,38 @@ pub async fn indexget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
 }
 
 #[get("/userprofile")]
-pub async fn userprofile(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
-    if cookies.get_private("id").is_some(){
-        return Ok(Template::render("userprofile", context! {}))
+pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
+    match cookies.get_private("id"){
+        Some(id) => {
+
+            let user_id = id.value().to_string().parse::<i64>().unwrap();
+            let user_info = sqlx::query(r#"SELECT * FROM users WHERE id = $1;"#)
+                .bind(user_id)
+                .fetch_one(&mut *db)
+                .await
+                .unwrap();
+
+            let mut info: Vec<String> = Vec::new();
+
+            let name: String = user_info.get("name");
+            let surname: String = user_info.get("surname");
+            let email: String = user_info.get("email");
+
+            let mut context_str = String::new();
+
+            context_str.push('{');
+            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\",\"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email);
+            context_str.push_str(&full_str);
+            context_str.push('}');
+            
+            info.push(context_str);
+
+            return Ok(Template::render("userprofile", context! {context: info}))
+        }
+        None => {
+            return Err(Redirect::to(uri!(login())))
+        }
     }
-    Err(Redirect::to(uri!(login())))
 }
 
 #[post("/userprofile", data = "<location>")]
@@ -168,7 +194,31 @@ pub async fn schedule(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Resu
             for i in &appointments{
                 println!("{:?}", i);
             }
-            return Ok(Template::render("schedule", context!{appointments: appointments})) //appointments: appointments}))
+
+            let user_id = id.value().to_string().parse::<i64>().unwrap();
+            let user_info = sqlx::query(r#"SELECT alt, lng FROM locations WHERE user_id = $1;"#)
+                .bind(user_id)
+                .fetch_one(&mut *db)
+                .await
+                .unwrap();
+
+                let alt_value: f64 = user_info.get("alt");
+                let lng_value: f64 = user_info.get("lng");
+
+                let mut coordinates: Vec<String> = Vec::new();
+
+                let mut coordinates_str: String = String::new(); 
+
+                coordinates_str.push('{');
+                let coord_str = format!("\"alt\": {}, \"lng\": {}", alt_value.to_string(), lng_value.to_string());
+                coordinates_str.push_str(&coord_str);
+                coordinates_str.push('}');
+
+                coordinates.push(coordinates_str);
+
+
+
+            return Ok(Template::render("schedule", context!{appointments: appointments, coordinates: coordinates}));
         } 
         _ => {
             Err(Redirect::to(uri!(login())))
@@ -227,7 +277,7 @@ pub fn login() -> Template {
 }
 
 #[post("/login", data = "<user>")]
-pub async fn loginfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Template, Redirect>{
+pub async fn loginfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
 
     let mut _message: String = "".to_string();
     let existing_users = sqlx::query(r#"select * from users where email= $1"#)
@@ -249,19 +299,19 @@ pub async fn loginfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: 
                     _message = "Success".to_string();
 
                     create_cookies(id, name, surname, email, cookies);
-                    return Err(Redirect::to(uri!(chat())));
+                    return Ok(Redirect::to(uri!(schedule())));
                     //return Ok(Template::render("schedule", context!{message: _message}))
                 }
                 else{
                     _message = "Incorrect password".to_string();
-                    return Ok(Template::render("login", context!{message: _message}))
+                    return Err(Template::render("login", context!{message: _message}))
                 }
             }
             Err(err) => {
                 match err{
                     Error::RowNotFound => {
                         _message = String::from("No users found with this email");
-                        return Err(Redirect::to(uri!(signup())))
+                        return Ok(Redirect::to(uri!(signup())))
                     }
                     _ => {
                         _message = String::from("Trouble connecting to database");
@@ -270,7 +320,7 @@ pub async fn loginfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: 
                 }
             }
     } 
-        Ok(Template::render("login", context! {
+        Err(Template::render("login", context! {
             message: _message,
         }))
 
@@ -290,7 +340,7 @@ pub fn signup() -> Template {
 }
 
 #[post("/signup", data = "<user>")]
-pub async fn signupfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Template{
+pub async fn signupfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
 
 let existing_users = sqlx::query(r#"select count(id) as count from users where email= $1"#)
     .bind(user.get_email())
@@ -335,12 +385,7 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
                                         let email: String = id_result.get("email");
                                         create_cookies(id, name, surname, email, cookies);
                                         return 
-                                            Template::render("schedule", context! {
-                                                message: "Success",
-                                                username: user.get_name(),
-                                                usersurname: user.get_surname(),
-                                                usermail: user.get_email(),
-                                                userpassword: user.get_password()}) 
+                                            Ok(Redirect::to(uri!(userprofile)));
 
                                     }
                                     Err(e) =>{
@@ -363,18 +408,12 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
 
     if success {
         return 
-        Template::render("schedule", context! {
-            message: "Success",
-            username: user.get_name(),
-            usersurname: user.get_surname(),
-            usermail: user.get_email(),
-            userpassword: user.get_password()
-        })
+        Ok(Redirect::to(uri!(userprofile)));
     }
 
-    Template::render("signup", context! {
+    Err(Template::render("signup", context! {
         message: message,
-    })
+    }))
 } 
 //admin
 #[post("/adminpanel")]

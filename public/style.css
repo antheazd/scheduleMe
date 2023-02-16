@@ -21,6 +21,7 @@ ul {
 .center {
   display: table;
   margin: 0 auto;
+  text-align: center;
 }
 
 .table_div{
@@ -92,7 +93,7 @@ table.customTable {
     font-weight: 700;
   }
 
-  .ui.cards{
+  .ui.cards {
     position: absolute;
     text-align: center;
     width: 13.5%;
@@ -101,12 +102,13 @@ table.customTable {
     top: 14.53%;
     font-size: 1vw;
   }
-.blue{
-  background-color: #2185d0;
-}
-.ui.celled.fixed.single.line.table{
-  text-align: center;
-}
+  
+  .blue{
+    background-color: #2185d0;
+  }
+  .ui.celled.fixed.single.line.table{
+    text-align: center;
+  }
 
 .ui.center.aligned.container{
   margin: auto;
