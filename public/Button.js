@@ -8,7 +8,7 @@ class Button extends React.Component {
   render() {
     
     return (
-      <a className="item" href="/logout"><button className="ui primary button">Log in</button></a>
+      <a className="item" href="/logout"><button className="ui primary button">{ this.props.label }</button></a>
     );}
 }
 /*
