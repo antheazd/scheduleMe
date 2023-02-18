@@ -5,7 +5,8 @@ class Separator extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        duration: 0
+        duration: 0,
+        overflow: "visible"
       };
       this.callback = this.callback.bind(this);
       this.boundCallback = this.callback.bind(this);
@@ -21,6 +22,10 @@ class Separator extends React.Component {
   
     separator_height(){
       var seconds = parseInt(this.state.duration);
+
+      if(seconds == 0) {
+        return '0px';
+      }
   
       var hour = Math.floor(seconds / 216000);
       seconds -= hour * 3600;
@@ -31,8 +36,10 @@ class Separator extends React.Component {
     }
   
     componentDidMount() {
-        const origin = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].alt));
+        const origin = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
         const destination = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
+        console.log("alt lng useralt userlng");
+        console.log(Number(this.props.alt), Number(this.props.lng), Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
   
         var service = new window.google.maps.DistanceMatrixService();
   
@@ -43,7 +50,7 @@ class Separator extends React.Component {
             travelMode: window.google.maps.TravelMode.DRIVING,
             avoidHighways: false,
             avoidTolls: false,
-            unitSystem: window.google.maps.UnitSystem.IMPERIAL
+            unitSystem: google.maps.UnitSystem.METRIC
           }, 
           this.callback
         );
@@ -54,6 +61,7 @@ class Separator extends React.Component {
        if (status === 'OK') {
         this.setState({duration: response.rows[0].elements[0].duration.value});
         console.log("seconds ", this.state.duration);
+        if(response.rows[0].elements[0].duration.value == 0)  this.setState({overflow: "hidden"});
       } else {
         console.error('Error:', status);
       }
@@ -66,9 +74,9 @@ class Separator extends React.Component {
   
       var seconds = parseInt(this.state.duration);
   
-      var duration_hour = Math.floor(seconds / 216000);
+      var duration_hour = Math.floor(seconds / 3600); //216000);
       seconds -= (duration_hour * 216000);
-      var duration_minute = Math.ceil(seconds / 3600);
+      var duration_minute = Math.ceil(seconds / 60); //3600);
   
       hour += duration_hour;
       minute += duration_minute;
@@ -85,8 +93,8 @@ class Separator extends React.Component {
     render() {
       return (
         <div>
-          <div className="ui cards" style={{ height: this.separator_height(), right:this.props.right, top: this.separator_top(this.props.start_time)}}>
-            <div className="ui card grey" >
+          <div className="ui cards" style={{ height: this.separator_height(), right:this.props.right, top: this.separator_top(this.props.start_time), overflow: this.state.overflow}}>
+            <div className="ui card grey">
               <div className="header grey">{ this.props.start_time } - { this.end_time() }</div>
             </div>
           </div>
