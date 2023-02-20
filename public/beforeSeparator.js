@@ -23,11 +23,34 @@ class BeforeSeparator extends React.Component {
     separator_height(){
       var seconds = parseInt(this.state.duration);
   
-      var hour = Math.floor(seconds / 3600);//216000);
+      var hour = Math.floor(seconds / 3600);
       seconds -= hour * 3600;
-      var minute = Math.ceil(seconds / 60);//3600);
+      var minute = Math.ceil(seconds / 60);
 
       return ((hour +  (minute / 60)) * 15.57) + '%';
+    }
+
+    start_time(){
+      var hour = parseInt(this.props.end_time.substring(0, this.props.end_time.indexOf(':')));
+      var minute = parseInt(this.props.end_time.substring(this.props.end_time.indexOf(':') + 1, this.props.end_time.length));
+  
+      var seconds = parseInt(this.state.duration);
+  
+      var duration_hour = Math.floor(seconds / 3600); 
+      seconds -= (duration_hour * 216000);
+      var duration_minute = Math.ceil(seconds / 60);
+  
+      hour -= duration_hour;
+      minute -= duration_minute;
+  
+      if(minute < 0) {
+        hour --;
+        minute = 60 + minute;
+      }
+      var zero = "";
+      if(minute < 10) zero = "0";
+  
+      return hour + ':' + zero + minute;
     }
   
     componentDidMount() {
@@ -60,31 +83,6 @@ class BeforeSeparator extends React.Component {
       }
     }
   
-  
-    start_time(){
-      var hour = parseInt(this.props.end_time.substring(0, this.props.end_time.indexOf(':')));
-      var minute = parseInt(this.props.end_time.substring(this.props.end_time.indexOf(':') + 1, this.props.end_time.length));
-  
-      var seconds = parseInt(this.state.duration);
-  
-      var duration_hour = Math.floor(seconds / 3600); //216000);
-      seconds -= (duration_hour * 216000);
-      var duration_minute = Math.ceil(seconds / 60); //3600);
-  
-      hour -= duration_hour;
-      minute -= duration_minute;
-  
-      if(minute < 0) {
-        hour --;
-        minute = 60 + minute;
-      }
-      var zero = "";
-      if(minute < 10) zero = "0";
-  
-      return hour + ':' + zero + minute;
-    }
-  
-    
     render() {
       return (
         <div>

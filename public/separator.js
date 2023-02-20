@@ -32,7 +32,30 @@ class Separator extends React.Component {
   
       return ((hour +  (minute / 60)) * 15.57) + '%';
     }
+
+    end_time(){
+      var hour = parseInt(this.props.start_time.substring(0, this.props.start_time.indexOf(':')));
+      var minute = parseInt(this.props.start_time.substring(this.props.start_time.indexOf(':') + 1, this.props.start_time.length));
   
+      var seconds = parseInt(this.state.duration);
+  
+      var duration_hour = Math.floor(seconds / 3600); //216000);
+      seconds -= (duration_hour * 216000);
+      var duration_minute = Math.ceil(seconds / 60); //3600);
+  
+      hour += duration_hour;
+      minute += duration_minute;
+  
+      if(minute >= 60) {
+        hour ++;
+        minute -= 60;
+      }
+      var zero = "";
+      if(minute < 10) zero = "0";
+  
+      return hour + ':' + zero + minute;
+    }  
+
     componentDidMount() {
         const origin = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
         const destination = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
@@ -61,31 +84,6 @@ class Separator extends React.Component {
         console.error('Error:', status);
       }
     }
-  
-  
-    end_time(){
-      var hour = parseInt(this.props.start_time.substring(0, this.props.start_time.indexOf(':')));
-      var minute = parseInt(this.props.start_time.substring(this.props.start_time.indexOf(':') + 1, this.props.start_time.length));
-  
-      var seconds = parseInt(this.state.duration);
-  
-      var duration_hour = Math.floor(seconds / 3600); //216000);
-      seconds -= (duration_hour * 216000);
-      var duration_minute = Math.ceil(seconds / 60); //3600);
-  
-      hour += duration_hour;
-      minute += duration_minute;
-  
-      if(minute >= 60) {
-        hour ++;
-        minute -= 60;
-      }
-      var zero = "";
-      if(minute < 10) zero = "0";
-  
-      return hour + ':' + zero + minute;
-    }
-  
     
     render() {
       return (
