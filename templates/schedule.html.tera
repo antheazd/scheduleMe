@@ -18,7 +18,7 @@
 
 <script src="static/table.js" type="text/babel"></script>
 <script src="static/beforeSeparator.js" type="text/babel"></script>
-<script src="static/separator.js" type="text/babel"></script>
+<script src="static/afterSeparator.js" type="text/babel"></script>
 <script src="static/appointment.js" type="text/babel"></script>
 <script src="static/schedule.js" type="text/babel"></script>
 <script src="static/add_appointment.js" type="text/babel"></script>

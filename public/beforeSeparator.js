@@ -54,7 +54,7 @@ class BeforeSeparator extends React.Component {
     }
   
     componentDidMount() {
-        if(this.props.end_time === "8:00") {console.log("hidden");this.setState({display: "none"});}
+        if(this.props.end_time === "8:00") this.setState({display: "none"});
         const destination = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
         const origin = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
         

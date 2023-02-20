@@ -93,7 +93,7 @@ class Appointment extends React.Component {
                      extra_days={this.extra_days}
           />
           <div className="ui cards" style={{ height: this.appointment_height(this.props.duration), right: this.right(this.props.day), top: this.top(this.props.start_hour, this.props.start_minute)}}><div className="ui card" ><div className="header">{ this.start_time() } - { this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }</div></div></div>
-          <Separator extra_weeks={this.props.extra_weeks} start_time={this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)} alt={this.props.alt} lng={this.props.lng} day={this.props.day} right={this.right(this.props.day)} top={this}
+          <AfterSeparator extra_weeks={this.props.extra_weeks} start_time={this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)} alt={this.props.alt} lng={this.props.lng} day={this.props.day} right={this.right(this.props.day)} top={this}
                      extra_days={this.extra_days} end_time={this.end_time} 
           />
         </div>

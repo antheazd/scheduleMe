@@ -1,6 +1,6 @@
 'use strict';
 
-class Separator extends React.Component {
+class AfterSeparator extends React.Component {
 
     constructor(props){
       super(props);
