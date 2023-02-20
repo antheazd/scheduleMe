@@ -112,6 +112,12 @@ table.customTable {
     right: 0.1%;
     top: 14.53%;
     font-size: 1vw;
+    display: block;
+  }
+
+  .separator{
+    background-color: grey;
+    font-size: 0.5vw;
   }
   
   .blue{

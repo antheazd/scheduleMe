@@ -10,8 +10,6 @@ class Table extends React.Component {
       d.setDate(d.getDate() + (((1 - d.getDay()) % 7) || 7) + (this.props.extra_weeks * 7) + extra_days);
   
       var day = d.getDate() + '.' + (d.getMonth()+1); 
-      console.log("day");
-      console.log(d.getDate(), d.getMonth());
   
       return day;
     }

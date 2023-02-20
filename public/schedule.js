@@ -14,14 +14,12 @@ class Schedule extends React.Component{
     nextWeek(){ 
             var z = this.state.extra_weeks + 1;
             this.setState({extra_weeks: z});
-            console.log("extra_weeks", this.state.extra_weeks);
               }
         
     previousWeek(){
             var z = this.state.extra_weeks;
             if(z > 0){
               z--;
-              console.log("extra_weeks", z);
               this.setState({extra_weeks: z});
             }
         }
