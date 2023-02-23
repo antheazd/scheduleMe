@@ -12,14 +12,6 @@ class BeforeSeparator extends React.Component {
       this.boundCallback = this.callback.bind(this);
     }
   
-    separator_top(start_time){
-        var hour = parseInt(start_time.substring(0, start_time.indexOf(':')));
-        var minute = parseInt(start_time.substring(start_time.indexOf(':') + 1, start_time.length));
-        var position =  18.25 + 7.5 * ((hour - 8) + (minute / 60));
-        
-        return  position + '%';
-    }
-  
     separator_height(){
       var seconds = parseInt(this.state.duration);
   
@@ -29,6 +21,14 @@ class BeforeSeparator extends React.Component {
 
       return ((hour +  (minute / 60)) * 15.57) + '%';
     }
+
+    separator_top(){
+      var appointment_start = this.props.top;
+      var separator_height = this.separator_height();
+      var end = parseFloat(appointment_start.substring(0, appointment_start.indexOf('%')));
+      var height = parseFloat(separator_height.substring(0, separator_height.indexOf('%')));
+      return end - height + '%';
+  }
 
     start_time(){
       var hour = parseInt(this.props.end_time.substring(0, this.props.end_time.indexOf(':')));
@@ -86,7 +86,7 @@ class BeforeSeparator extends React.Component {
     render() {
       return (
         <div>
-          <div className="ui cards" style={{ height: this.separator_height(), right:this.props.right, top: this.separator_top(this.start_time()), display: this.state.display}}>
+          <div className="ui cards" style={{ height: this.separator_height(), right:this.props.right, top: this.separator_top(), display: this.state.display}}>
             <div className="ui card separator">
               <div className="header separator">{ this.start_time() } - { this.props.end_time }</div>
             </div>
