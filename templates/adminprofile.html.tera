@@ -1,0 +1,8 @@
+{% extends "adminbase" %}
+{% block content %}
+<script>
+    var context = {{ context }};
+</script>
+<div id="userprofile"></div>
+<script type="text/babel" src="static/profile.js"></script>
+{% endblock content %}

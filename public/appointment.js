@@ -21,7 +21,7 @@ class Appointment extends React.Component {
     }
   
     right(day){
-      if (this.extra_days(day) < 0 || this.extra_days(day) > this.extra_days(day) > 6){
+      if (this.extra_days(day) < 0 || this.extra_days(day) > 6){
           return '120%';
       }
       var days = (7 - this.extra_days(day) - 1) * 12.5 + 0.15;

@@ -28,7 +28,7 @@ class Appointment extends React.Component {
     }
   
     right(day){
-      if (this.extra_days(day) < 0 || this.extra_days(day) > this.extra_days(day) > 6){
+      if (this.extra_days(day) < 0 || this.extra_days(day) > 6){
           return '120%';
       }
       var days = (7 - this.extra_days(day) - 1) * 12.5 + 0.15;
@@ -135,7 +135,7 @@ class Appointment extends React.Component {
                 <div className="ui attached message">
                 <div className="content">
                 <div className="header">Appointment</div>
-                    <p>Details</p></div></div>
+                    <p>{ this.props.name } { this.props.surname }</p></div></div>
                     <form className="ui form attached fluid segment" method="post">
                         <div className="equal width fields">
 
@@ -146,28 +146,28 @@ class Appointment extends React.Component {
 
                             <div className="field">
                             <label>Time</label>
-                                { this.props.start_hour }:{ this.props.start_minute }-{ this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }
+                            { this.start_time() }-{ this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }
+                            </div>
+
+                            <div className="field">
+                                <label>Duration</label>
+                                { this.props.duration }
+                            </div>
+                        </div>
+
+                    <div className="equal width fields">
+
+                            <div className="field">
+                                <label>Price</label>
+                                { this.props.price } €
                             </div>
 
                             <div className="field">
                             <label>Location</label>
                                 <a href={ this.location_link() }>Location</a>
                             </div>
+
                         </div>
-
-                    <div className="equal width fields">
-                        
-                            <div className="field">
-                            <label>Duration</label>
-                            { this.props.duration }
-                            </div>
-                        
-
-                            <div className="field">
-                            <label>Type</label>
-                            Type
-                            </div>
-                        </div>  
 
                     </form>
                     </div>

@@ -414,65 +414,76 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
     Err(Template::render("signup", context! {
         message: message,
     }))
-} 
+}
+
 //admin
-#[post("/adminpanel")]
-pub async fn adminpanel(mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
+
+#[get("/adminprofile")]
+pub async fn adminprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
+    match cookies.get_private("id"){
+        Some(id) => {
+
+            let admin_id = id.value().to_string().parse::<i64>().unwrap();
+            let user_info = sqlx::query(r#"SELECT * FROM admins WHERE id = $1;"#)
+                .bind(admin_id)
+                .fetch_one(&mut *db)
+                .await
+                .unwrap();
+
+            let mut info: Vec<String> = Vec::new();
+
+            let name: String = user_info.get("name");
+            let surname: String = user_info.get("surname");
+            let email: String = user_info.get("email");
+
+            let mut context_str = String::new();
+
+            context_str.push('{');
+            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\",\"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email);
+            context_str.push_str(&full_str);
+            context_str.push('}');
+            
+            info.push(context_str);
+
+            return Ok(Template::render("adminprofile", context! {context: info}))
+        }
+        None => {
+            return Err(Redirect::to(uri!(adminlogin())))
+        }
+    }
+}
+#[post("/adminpanel", data = "<appointment>")]
+pub async fn adminpanel(appointment: Form<appointment::Appointment>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
     let mut id_cookie = cookies.get_private("id");
     match id_cookie {
         Some(id) => {
 
-            let mut appointments: Vec<String> = Vec::new();
+            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 100);"#)
+                .bind(appointment.get_id())
+                .bind(appointment.get_day())
+                .bind(appointment.get_start_hour())
+                .bind(appointment.get_start_minute())
+                .bind(appointment.get_duration())
+                .fetch_one(&mut *db)
+                .await;
             
-            let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, locations.id, locations.description, locations.user_id, locations.alt, locations.lng FROM appointments JOIN locations ON appointments.user_id = locations.user_id;"#)
-                .fetch_all(&mut *db)
-                .await
-                .unwrap();
-
-            for row in query{
-                let mut s: String = String::new();
-
-                let appointment_id: i64 = row.get("appointment_id");
-                let day: String = row.get("day");
-                let start_hour: i32 = row.get("start_hour");
-                let start_minute: i32 = row.get("start_minute");
-                let duration: String = row.get("duration");
-                let alt: f64 = row.get("alt");
-                let lng: f64 = row.get("lng");
-
-                s.push('{');
-
-                let full_str = format!("\"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}, \"{}\": {}", stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(alt), alt, stringify!(lng), lng, stringify!(appointment_id), appointment_id);
-                
-                s.push_str(&full_str);
-
-                s.push('}');
-
-                appointments.push(s);
+            match add_appointment{
+                Ok(d) => {
+                    println!("inserted");
+                }
+                Err(e) => {
+                    println!("{}", e.to_string());
+                }
             }
-
-            for i in &appointments{
-                println!("{:?}", i);
-            }
-
-
-            return Err(Template::render("adminpanel", context!{appointments: appointments}));
-        } 
-        _ => {
-            Ok(Redirect::to(uri!(adminlogin())))
+            return Ok(Redirect::to(uri!(adminpanel())));
+        }
+        None => {
+            println!("no id");
+            return Ok(Redirect::to(uri!(adminlogin())));
         }
     }
-
 }
-/* 
-#[get("/adminpanel")]
-pub async fn adminpanelget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
-    if cookies.get_private("id").is_some(){
-        return Ok(Template::render("adminpanel", 
-            context! {}))
-    }
-    Err(Redirect::to(uri!(adminlogin())))
-}*/
+
 
 #[get("/adminpanel")]
 pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
@@ -482,7 +493,7 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
 
             let mut appointments: Vec<String> = Vec::new();
             
-            let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, locations.id, locations.description, locations.user_id, locations.alt, locations.lng FROM appointments JOIN locations ON appointments.user_id = locations.user_id;"#)
+            let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, locations.id, locations.description, locations.user_id, locations.alt, locations.lng, users.name, users.surname FROM appointments JOIN locations ON appointments.user_id = locations.user_id JOIN users ON users.id = appointments.user_id;"#)
                 .fetch_all(&mut *db)
                 .await
                 .unwrap();
@@ -497,10 +508,13 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
                 let duration: String = row.get("duration");
                 let alt: f64 = row.get("alt");
                 let lng: f64 = row.get("lng");
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
+                let price: f32 = row.get("price");
 
                 s.push('{');
 
-                let full_str = format!("\"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}, \"{}\": {}", stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(alt), alt, stringify!(lng), lng, stringify!(appointment_id), appointment_id);
+                let full_str = format!("\"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}, \"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\", \"{}\": {}", stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(alt), alt, stringify!(lng), lng, stringify!(appointment_id), appointment_id, stringify!(name), name, stringify!(surname), surname, stringify!(price), price);
                 
                 s.push_str(&full_str);
 
@@ -508,11 +522,29 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
 
                 appointments.push(s);
             }
+            
+            let users_query = sqlx::query(r#"SELECT users.id AS users_id, users.name, users.surname FROM users;"#)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
 
-            for i in &appointments{
-                println!("{:?}", i);
+            for row in users_query{
+                let mut s: String = String::new();
+
+                let users_id: i64 = row.get("users_id");
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
+
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\",\"{}\": \"{}\"", stringify!(users_id), users_id, stringify!(name), name, stringify!(surname), surname);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                appointments.push(s);
             }
-
 
             return Ok(Template::render("adminpanel", context!{appointments: appointments}));
         } 
@@ -529,55 +561,6 @@ pub fn adminlogin() -> Template {
     })
 }
 
-/* 
-#[post("/adminlogin", data = "<admin>")]
-pub async fn adminloginfn(admin: Form<admin::Admin>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Template{
-
-    let mut _message: String = "".to_string();
-    let existing_admins = sqlx::query(r#"select * from admins where email= $1"#)
-        .bind(admin.get_email())
-        .bind(admin.get_password())
-        .fetch_one(&mut *db)
-        .await;
-    
-        match existing_admins{
-            Ok(data) => {
-                let id: Option<i64> = data.get("id");
-                let name: Option<String> = data.get("name");
-                let surname: Option<String> = data.get("surname");
-                let email: String = data.get("email");
-                let password: String = data.get("password");
-                if password == admin.get_password().as_str(){
-
-                        println!("Success");
-                        _message = "Success".to_string();
-
-                        create_cookies(id, name, surname, email, cookies);
-                        return 
-                            Template::render("adminpanel", context!{message: _message})
-                }
-                else{
-                    _message = "Incorrect password".to_string();
-                    return Template::render("adminlogin", context!{message: _message})
-                }
-            }
-            Err(err) => {
-                match err{
-                    Error::RowNotFound => {
-                        _message = String::from("No admins found with this email");
-                    }
-                    _ => {
-                        _message = String::from("Trouble connecting to database");
-                        println!("{}", err);
-                    }
-                }
-            }
-    } 
-        Template::render("adminlogin", context! {
-            message: _message,
-        })
-
-}*/
 
 #[post("/adminlogin", data = "<admin>")]
 pub async fn adminloginfn(admin: Form<admin::Admin>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
@@ -602,7 +585,6 @@ pub async fn adminloginfn(admin: Form<admin::Admin>, mut db: Connection<Logs>, c
 
                     create_cookies(id, name, surname, email, cookies);
                     return Ok(Redirect::to(uri!(adminpanel())));
-                    //return Ok(Template::render("schedule", context!{message: _message}))
                 }
                 else{
                     _message = "Incorrect password".to_string();
@@ -632,4 +614,19 @@ pub async fn adminloginfn(admin: Form<admin::Admin>, mut db: Connection<Logs>, c
 pub fn adminlogout(cookies: &CookieJar<'_>) -> Redirect {
     remove_cookies(cookies);
     Redirect::to(uri!(adminlogin()))
+}
+
+#[get("/adminchat")]
+pub async fn adminchat(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
+    if cookies.get_private("id").is_some(){
+        return Ok(Template::render("adminchat", context! {}))
+    }
+    Err(Redirect::to(uri!(adminlogin())))
+}
+#[get("/adminpayments")]
+pub async fn adminpayments(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
+    if cookies.get_private("id").is_some(){
+        return Ok(Template::render("adminpayments", context! {}))
+    }
+    Err(Redirect::to(uri!(adminlogin())))
 }
