@@ -34,14 +34,3 @@ url = "postgres://postgres:rocket@localhost:5435/webappdb"
 
 #[default.databases.rocket]
 #ROCKET_DATABASES={webappdb={url="postgres://postgres:rocket@localhost:5435/webappdb"}}
-
-
-
-
-
-
-
-
-
-
-

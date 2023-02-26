@@ -116,8 +116,9 @@ table.customTable {
   }
 
   .separator{
-    background-color: grey;
+    background-color: #e0e1e2;
     font-size: 0.5vw;
+    color: #3a4144;
   }
   
   .blue{
