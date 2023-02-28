@@ -34,13 +34,12 @@ class Schedule extends React.Component{
                         </div>  
 
                         <ul>
-                          {window.context.map(i => 
+                          {window.context.filter((x)=> x.appointment_id != null).map(i => 
                             <div  key = {i.appointment_id}>
-                                <Appointment extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price}/>
+                                <Appointment key={this.state.extra_weeks} extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price}/>
                             </div>
                             )}
                         </ul>
-
                     </div>
                 )
             }

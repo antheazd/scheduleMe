@@ -20,4 +20,3 @@
 <script src="static/adminComponents/schedule.js" type="text/babel"></script>
 <script src="static/adminComponents/add_appointment.js" type="text/babel"></script>
 {% endblock content %}
-

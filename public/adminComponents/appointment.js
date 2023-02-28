@@ -103,12 +103,12 @@ class Appointment extends React.Component {
       }
 
     componentDidMount() {
-        if (this.extra_days(this.props.day) >= 0 && this.extra_days(this.props.day) < 6){
+        if (this.extra_days(this.props.day) > 0 && this.extra_days(this.props.day) < 6){
             this.setState({buttonDisplay: true});
-            console.log(this.extra_days(this.props.day));
+            console.log(this.extra_days(this.props.day), this.props.extra_weeks);
           }
       }
-    
+
     render() {
       return (
         <div>
