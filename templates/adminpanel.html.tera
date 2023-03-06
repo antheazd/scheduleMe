@@ -1,3 +1,22 @@
-{% extends "base" %}
+{% extends "adminbase" %}
 {% block content %}
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8&callback=initMap">
+</script>
+
+<script>
+    var context = {{ appointments }};
+</script>
+
+<div class="full_page">
+    <div class="table_div" id="table">
+    <div id="add_appointment"></div> 
+    <div id="schedule"></div>
+    </div>
+</div>
+
+<script src="static/table.js" type="text/babel"></script>
+<script src="static/adminComponents/appointment.js" type="text/babel"></script>
+<script src="static/adminComponents/schedule.js" type="text/babel"></script>
+<script src="static/adminComponents/add_appointment.js" type="text/babel"></script>
 {% endblock content %}
