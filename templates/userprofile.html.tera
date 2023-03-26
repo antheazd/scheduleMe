@@ -4,5 +4,5 @@
     var context = {{ context }};
 </script>
 <div id="userprofile"></div>
-<script type="text/babel" src="static/profile.js"></script>
+<script type="text/babel" src="static/sharedComponents/profile.js"></script>
 {% endblock content %}

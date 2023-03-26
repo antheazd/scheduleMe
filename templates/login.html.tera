@@ -13,7 +13,7 @@
   <body>
       <div id="loginform" type="text/babel"></div>
       
-      <script src="static/button.js" type="text/babel"></script>
-      <script src="static/loginform.js" type="text/babel"></script>
+      <script src="static/sharedComponents/button.js" type="text/babel"></script>
+      <script src="static/sharedComponents/loginform.js" type="text/babel"></script>
   </body>
 </html>

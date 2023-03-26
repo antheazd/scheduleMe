@@ -10,17 +10,16 @@
 </script>
 
 <div class="full_page">
-    <div class="table_div" id="table">
-    <div id="add_appointment"></div> 
+    <div id="table"> 
     <div id="schedule"></div>
     </div>
 </div>
 
-<script src="static/table.js" type="text/babel"></script>
-<script src="static/beforeSeparator.js" type="text/babel"></script>
-<script src="static/afterSeparator.js" type="text/babel"></script>
-<script src="static/appointment.js" type="text/babel"></script>
-<script src="static/schedule.js" type="text/babel"></script>
-<script src="static/add_appointment.js" type="text/babel"></script>
+<script src="static/userComponents/add_appointment.js" type="text/babel"></script>
+<script src="static/sharedComponents/table.js" type="text/babel"></script>
+<script src="static/sharedComponents/beforeSeparator.js" type="text/babel"></script>
+<script src="static/sharedComponents/afterSeparator.js" type="text/babel"></script>
+<script src="static/sharedComponents/appointment.js" type="text/babel"></script>
+<script src="static/userComponents/schedule.js" type="text/babel"></script>
 {% endblock content %}
 

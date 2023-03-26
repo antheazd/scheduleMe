@@ -13,7 +13,7 @@
     <body>
         <div id="signupform" type="text/babel"></div>
         
-        <script src="static/button.js" type="text/babel"></script>
-        <script src="static/signupform.js" type="text/babel"></script>
+        <script src="static/sharedComponents/button.js" type="text/babel"></script>
+        <script src="static/userComponents/signupform.js" type="text/babel"></script>
     </body>
 </html>
