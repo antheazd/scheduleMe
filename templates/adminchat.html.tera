@@ -1,3 +1,11 @@
 {% extends "adminbase" %}
 {% block content %}
+
+<div id="chat"></div>
+<script>
+    var context = {{ messages }};
+</script>
+
+<script src="/static/sharedComponents/message.js" type="text/babel"></script>
+<script src="/static/sharedComponents/chat.js" type="text/babel"></script>
 {% endblock content %}

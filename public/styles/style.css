@@ -35,10 +35,12 @@ ul {
   max-width: 50%;
   width: fit-content;
   block-size: fit-content;
+  margin-left: 1%;
 }
 
 .right {
   margin-left: auto;
+  margin-right: 1%;
 }
 
 .date{

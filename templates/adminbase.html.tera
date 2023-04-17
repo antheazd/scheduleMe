@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="#" />
-    <link rel="stylesheet" href="static/styles/style.css">
+    <link rel="stylesheet" href="/static/styles/style.css">
     <link async rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"/>
     <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin' rel='stylesheet' type='text/css'>
 
@@ -16,7 +16,7 @@
   <body>
   <div id="navbar" type="text/babel"></div>
   {% block content %}{% endblock content %}
-  <script src="static/sharedComponents/button.js" type="text/babel"></script>
-  <script src="static/adminComponents/navbar.js" type="text/babel"></script>
+  <script src="/static/sharedComponents/button.js" type="text/babel"></script>
+  <script src="/static/adminComponents/navbar.js" type="text/babel"></script>
 </body>
 </html>
