@@ -425,10 +425,11 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
         }
     }
     if count == 0 {
-            let query = rocket_db_pools::sqlx::query(r#"INSERT INTO users (name, surname, email, password) VALUES ($1, $2, $3, $4);"#)
+            let query = rocket_db_pools::sqlx::query(r#"INSERT INTO users (name, surname, email, phone, password) VALUES ($1, $2, $3, $4, $5);"#)
                 .bind(user.get_name())
                 .bind(user.get_surname())
                 .bind(user.get_email())
+                .bind(user.get_phone())
                 .bind(user.get_password())
                 .execute(&mut *db)
                 .await;

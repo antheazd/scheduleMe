@@ -3,6 +3,7 @@
 
 <script>
     var users = {{ users }};
+    var other_users = {{ other_users }};
 </script>
 
 <div id="inbox"></div>

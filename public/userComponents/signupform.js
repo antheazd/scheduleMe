@@ -25,6 +25,12 @@ class SignUpForm extends React.Component {
                         </div>
                     </div>
                     <div className="field">
+                        <label>Phone</label>
+                        <div className="ui input">
+                            <input type="phone" placeholder="Phone" id="phone" name="phone"/>
+                        </div>
+                    </div>
+                    <div className="field">
                         <label>Email</label>
                         <div className="ui input">
                             <input type="email" placeholder="Email" id="email" name="email"/>

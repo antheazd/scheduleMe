@@ -224,7 +224,7 @@ pub async fn adminchats(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Re
 
             let mut users: Vec<String> = Vec::new();
             
-            let query = sqlx::query(r#"WITH filtered_messages AS (SELECT user_id, created FROM messages WHERE admin_id = 1 ORDER BY created) SELECT DISTINCT user_id FROM filtered_messages;"#)
+            let query = sqlx::query(r#"WITH filtered_messages AS (SELECT user_id, created FROM messages WHERE admin_id = 1 ORDER BY created) SELECT DISTINCT user_id, users.name, users.surname FROM filtered_messages JOIN users ON users.id = user_id;"#)
                 .bind(admin_id)
                 .fetch_all(&mut *db)
                 .await
@@ -234,10 +234,11 @@ pub async fn adminchats(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Re
                 let mut s: String = String::new();
 
                 let user_id: i64 = row.get("user_id");
-
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
                 s.push('{');
 
-                let full_str = format!("\"{}\": {}", stringify!(user_id), user_id);
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\"", stringify!(user_id), user_id, stringify!(name), name, stringify!(surname), surname);
                 
                 s.push_str(&full_str);
 
@@ -246,11 +247,33 @@ pub async fn adminchats(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Re
                 users.push(s);
             }
 
-            for i in &users{
-                println!("{:?}", i);
+            let mut other_users: Vec<String> = Vec::new();
+            
+            let other_users_query = sqlx::query(r#"SELECT id, name, surname FROM users WHERE id NOT IN (SELECT user_id FROM messages WHERE admin_id = 1)"#)
+                .bind(admin_id)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            for row in other_users_query{
+                let mut s: String = String::new();
+
+                let user_id: i64 = row.get("id");
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\"", stringify!(user_id), user_id, stringify!(name), name, stringify!(surname), surname);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                other_users.push(s);
             }
 
-            return Ok(Template::render("adminchats", context!{users: users}));
+
+            return Ok(Template::render("adminchats", context!{users: users, other_users: other_users}));
         } 
         _ => {
             Err(Redirect::to(uri!(adminlogin())))
