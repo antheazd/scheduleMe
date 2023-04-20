@@ -45,9 +45,17 @@ class Profile extends React.Component {
                   {window.context[0].email}
                 <div className="ui hidden divider"></div>
 
+                <h3 className="ui header">Phone number</h3><br></br>
+                  {window.context[0].phone}
+                <div className="ui hidden divider"></div>
+
+                <h3 className="ui header">Current location</h3><br></br>
+                  {window.context[0].location}
+                <div className="ui hidden divider"></div>
+
                 <form className="ui form" method="post">
                         <div className="field">
-                              <h3>Location</h3>
+                              <h3>Change Location</h3>
                             <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder="Anything you want!"/>
                         </div>
                             <input type="hidden"  id="alt" name="alt"/>

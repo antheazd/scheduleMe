@@ -40,7 +40,7 @@ pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> R
         Some(id) => {
 
             let user_id = id.value().to_string().parse::<i64>().unwrap();
-            let user_info = sqlx::query(r#"SELECT * FROM users WHERE id = $1;"#)
+            let user_info = sqlx::query(r#"SELECT users.name, users.surname, users.email, users.phone, locations.description FROM users JOIN locations ON users.id = locations.user_id  WHERE users.id = $1;"#)
                 .bind(user_id)
                 .fetch_one(&mut *db)
                 .await
@@ -51,11 +51,13 @@ pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> R
             let name: String = user_info.get("name");
             let surname: String = user_info.get("surname");
             let email: String = user_info.get("email");
+            let phone: String = user_info.get("phone");
+            let location: String = user_info.get("description");
 
             let mut context_str = String::new();
 
             context_str.push('{');
-            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\",\"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email);
+            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\", \"{}\": \"{}\", \"{}\": \"{}\", \"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email, stringify!(phone), phone, stringify!(location), location);
             context_str.push_str(&full_str);
             context_str.push('}');
             
