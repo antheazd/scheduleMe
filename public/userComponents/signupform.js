@@ -1,7 +1,6 @@
 'use strict';
 console
 class SignUpForm extends React.Component {
-
   render() {
     return (
         <div className="half_page">
@@ -9,7 +8,7 @@ class SignUpForm extends React.Component {
             <div className="content">
             <div className="header">Welcome to our site!</div>
                 <p>Fill out the form below to sign-up for a new account</p></div></div>
-                <form className="ui form attached fluid segment" method="post">
+                <form className="ui form attached fluid segment" method="post" id="form">
                     <div className="equal width fields">
                         <div className="field">
                             <label>Name</label>
@@ -26,9 +25,9 @@ class SignUpForm extends React.Component {
                     </div>
                     <div className="field">
                         <label>Phone</label>
-                        <div className="ui input">
-                            <input type="phone" placeholder="Phone" id="phone" name="phone"/>
-                        </div>
+                            <div className="ui fluid input">
+                                <input type="text" placeholder="Phone" id="phone" name="phone"/>
+                            </div>
                     </div>
                     <div className="field">
                         <label>Email</label>

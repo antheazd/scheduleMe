@@ -22,6 +22,7 @@ class AddAppointment extends React.Component {
         <div className="ui center aligned container" style={{ visibility: this.state.visibility }}>
               <div className="half_page">
               <div className="ui attached message">
+              <i class="close icon" onClick={this.updateState}></i>
               <div className="content">
               <div className="header">Add your appointment</div>
                   <p>Fill out the form below</p></div></div>

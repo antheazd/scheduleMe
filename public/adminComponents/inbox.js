@@ -36,23 +36,24 @@ class Inbox extends React.Component {
         </div>
 
       {this.state.visibility?
-          <div class="half_page">
-            <div class="ui attached message">
-              <div class="content">
+          <div className="half_page">
+            <div className="ui attached message">
+            <i class="close icon" onClick={this.updateState}></i>
+              <div className="content">
+                <div className="header">Start a new chat!</div></div></div>
                 <form className="ui form attached fluid segment" method="post">
+                <div className="equal width fields" style={{ display: "inline-block"}}>
                 {window.other_users.map(i => 
-                    <div key={i.user_id}>
-                      <div className="ui segment">
-                        <h3 className="ui header">
-                          <a href={'/adminchat/' + i.user_id}>{i.name} {i.surname}</a>
-                        </h3>
+                    <div key={i.user_id} className="field">
+                        <div className="ui fluid input">
+                          <h3><a href={'/adminchat/' + i.user_id}>{i.name} {i.surname}</a></h3>
+                        </div>
+                        <br></br>
                       </div>
-                    </div>
                     )}
+                  </div>
                 </form>
-              </div>
             </div>
-          </div>
         : null}
       
       </div>

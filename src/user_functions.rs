@@ -408,7 +408,7 @@ pub fn signup() -> Template {
 #[post("/signup", data = "<user>")]
 pub async fn signupfn(user: Form<user::User>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
 
-let existing_users = sqlx::query(r#"select count(id) as count from users where email= $1"#)
+let existing_users = sqlx::query(r#"SELECT COUNT(id) AS count FROM users WHERE email= $1"#)
     .bind(user.get_email())
     .fetch_one(&mut *db)
     .await;
@@ -426,12 +426,13 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
             message = err.to_string();
         }
     }
+    println!("{}", user.get_phone());
     if count == 0 {
-            let query = rocket_db_pools::sqlx::query(r#"INSERT INTO users (name, surname, email, phone, password) VALUES ($1, $2, $3, $4, $5);"#)
+            let query = rocket_db_pools::sqlx::query(r#"INSERT INTO users (name, surname, phone, email, password) VALUES ($1, $2, $3, $4, $5);"#)
                 .bind(user.get_name())
                 .bind(user.get_surname())
-                .bind(user.get_email())
                 .bind(user.get_phone())
+                .bind(user.get_email())
                 .bind(user.get_password())
                 .execute(&mut *db)
                 .await;
@@ -452,7 +453,7 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
                                         let email: String = id_result.get("email");
                                         create_cookies(id, name, surname, email, cookies);
                                         return 
-                                            Ok(Redirect::to(uri!(userprofile)));
+                                            Ok(Redirect::to(uri!(location_get)));
 
                                     }
                                     Err(e) =>{
@@ -481,4 +482,33 @@ let existing_users = sqlx::query(r#"select count(id) as count from users where e
     Err(Template::render("signup", context! {
         message: message,
     }))
+}
+
+#[get("/location")]
+pub fn location_get() -> Template {
+    Template::render("location", context! {})
+}
+
+#[post("/location", data = "<location>")]
+pub async fn location_post(location: Form<location::Location>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Redirect{
+    let id_cookie = cookies.get_private("id");
+    match id_cookie {
+        Some(id) => {
+            let user_id = id.value().to_string().parse::<i64>().unwrap();
+
+            let query = rocket_db_pools::sqlx::query(r#"INSERT INTO locations (description, alt, lng, user_id) VALUES ($1, $2, $3, $4);"#)
+                .bind(location.get_description())
+                .bind(location.get_alt())
+                .bind(location.get_lng())
+                .bind(user_id)
+                .execute(&mut *db)
+                .await;
+
+            return Redirect::to(uri!(userprofile));
+            }
+        
+    None => {
+            return Redirect::to(uri!(signup));
+        }
+    }
 }

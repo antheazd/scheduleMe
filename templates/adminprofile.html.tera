@@ -3,6 +3,6 @@
 <script>
     var context = {{ context }};
 </script>
-<div id="userprofile"></div>
-<script type="text/babel" src="static/sharedComponents/profile.js"></script>
+<div id="adminprofile"></div>
+<script type="text/babel" src="static/adminComponents/adminProfile.js" />
 {% endblock content %}

@@ -17,10 +17,11 @@ class AddAppointment extends React.Component {
   render() {
     return (
       <div>
-        <div className="center"><button className="ui circular icon button" onClick={this.updateState}><i aria-hidden="true" className="calendar plus icon"></i></button></div>
+        <div className="center"><button className="ui basic button" onClick={this.updateState}>Add appointment</button></div>
         {this.state.visibility ?
           <div className="half_page">
           <div className="ui attached message">
+          <i class="close icon" onClick={this.updateState}></i>
           <div className="content">
           <div className="header">Add your appointment</div>
               <p>Fill out the form below</p></div></div>

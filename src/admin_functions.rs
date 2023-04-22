@@ -32,11 +32,12 @@ pub async fn adminprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> 
             let name: String = user_info.get("name");
             let surname: String = user_info.get("surname");
             let email: String = user_info.get("email");
+            let phone: String = user_info.get("phone");
 
             let mut context_str = String::new();
 
             context_str.push('{');
-            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\",\"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email);
+            let full_str = format!("\"{}\": \"{}\", \"{}\": \"{}\",\"{}\": \"{}\",\"{}\": \"{}\"", stringify!(name), name, stringify!(surname), surname, stringify!(email), email, stringify!(phone), phone);
             context_str.push_str(&full_str);
             context_str.push('}');
             
@@ -51,7 +52,7 @@ pub async fn adminprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> 
 }
 #[post("/adminpanel", data = "<appointment>")]
 pub async fn adminpanel(appointment: Form<appointment::Appointment>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
-    let mut id_cookie = cookies.get_private("id");
+    let id_cookie = cookies.get_private("id");
     match id_cookie {
         Some(id) => {
 
@@ -249,7 +250,7 @@ pub async fn adminchats(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Re
 
             let mut other_users: Vec<String> = Vec::new();
             
-            let other_users_query = sqlx::query(r#"SELECT id, name, surname FROM users WHERE id NOT IN (SELECT user_id FROM messages WHERE admin_id = 1)"#)
+            let other_users_query = sqlx::query(r#"SELECT id, name, surname FROM users WHERE id NOT IN (SELECT user_id FROM messages WHERE admin_id = 1) ORDER BY name ASC, surname ASC;"#)
                 .bind(admin_id)
                 .fetch_all(&mut *db)
                 .await
