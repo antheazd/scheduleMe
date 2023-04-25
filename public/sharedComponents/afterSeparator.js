@@ -31,7 +31,7 @@ class AfterSeparator extends React.Component {
         minute -= 60;
       }
 
-      if(minute < 10)  hour + ':0' + minute;
+      if(minute < 10)  return hour + ':0' + minute;
   
       return hour + ':' + minute;
     }

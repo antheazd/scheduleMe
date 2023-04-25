@@ -28,7 +28,7 @@ class BeforeSeparator extends React.Component {
       minute = 60 + minute;
     }
 
-    if(minute < 10) return hour + ':0' + minute;;
+    if(minute < 10) return hour + ':0' + minute;
     
     return hour + ':' + minute;
   }

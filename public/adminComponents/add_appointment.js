@@ -3,26 +3,27 @@
 class AddAppointment extends React.Component {
   constructor() {
     super();
-    this.state = {visibility: "hidden"}
+    this.state = {visibility: false}
     this.updateState = this.updateState.bind(this)}
 
     updateState(){ 
-      if(this.state.visibility == "visible"){
-        this.setState({visibility: "hidden"}) }
+      if(this.state.visibility == true){
+        this.setState({visibility: false}) }
       else{
-        this.setState({visibility: "visible"}) 
+        this.setState({visibility: true}) 
       }
     }
 
   render() {
     return (
         <div>
-        <div className="center"><button className="ui circular icon button" onClick={this.updateState}><i aria-hidden="true" className="calendar plus icon"></i></button></div>
-        
-        <div className="ui center aligned container" style={{ visibility: this.state.visibility }}>
+          <div className="center"><button className="ui basic button" onClick={this.updateState}>Add appointment</button></div>    
+
+          {this.state.visibility ?
+          <div className="ui center aligned container">
               <div className="half_page">
               <div className="ui attached message">
-              <i class="close icon" onClick={this.updateState}></i>
+              <i className="close icon" onClick={this.updateState}></i>
               <div className="content">
               <div className="header">Add your appointment</div>
                   <p>Fill out the form below</p></div></div>
@@ -146,7 +147,7 @@ class AddAppointment extends React.Component {
                         <div className="field">
                             <label>User</label>
                             <select id="id" name="id">
-                                {window.context.filter((x)=> x.users_id != null).map(it => 
+                                {window.users.map(it => 
                                       <option key = { it.users_id } value={ it.users_id }>{ it.name } { it.surname }</option>
                               )}
                             </select>
@@ -158,6 +159,7 @@ class AddAppointment extends React.Component {
                   </div>
                 
               </div>
+        : null}
         </div>
     );}
   }

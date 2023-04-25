@@ -86,6 +86,7 @@ class Appointment extends React.Component {
     var monday = new Date();
     monday.setDate(monday.getDate() + (((1 - monday.getDay()) % 7) || 7) + (this.props.extra_weeks * 7));
     var day = new Date(this.props.day);
+    if((day.getMonth() != monday.getMonth()) || (day.getFullYear() != monday.getFullYear())) return -1;
     return day.getDate() - monday.getDate();
   }
 
@@ -149,10 +150,10 @@ class Appointment extends React.Component {
       case "2h":
         end_hour += 2;
     }
-    var zero = "";
-    if (end_minute < 10) zero = "0";
 
-    return end_hour + ':' + zero + end_minute;
+    if (end_minute < 10) return end_hour + ':0' + end_minute;
+
+    return end_hour + ':' + end_minute;
   }
 
 

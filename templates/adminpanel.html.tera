@@ -5,12 +5,12 @@
 </script>
 
 <script>
-    var context = {{ appointments }};
+    var appointments = {{ appointments }};
+    var users = {{ users }};
 </script>
 
 <div class="full_page">
-    <div class="table_div" id="table">
-    <div id="add_appointment"></div> 
+    <div id="table">
     <div id="schedule"></div>
     </div>
 </div>

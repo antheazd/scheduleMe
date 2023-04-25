@@ -90,6 +90,7 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
         Some(id) => {
 
             let mut appointments: Vec<String> = Vec::new();
+            let mut users: Vec<String> = Vec::new();
             
             let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, locations.id, locations.description, locations.user_id, locations.alt, locations.lng, users.name, users.surname FROM appointments JOIN locations ON appointments.user_id = locations.user_id JOIN users ON users.id = appointments.user_id WHERE appointments.day > CURRENT_DATE;"#)
                 .fetch_all(&mut *db)
@@ -141,10 +142,10 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
 
                 s.push('}');
 
-                appointments.push(s);
+                users.push(s);
             }
 
-            return Ok(Template::render("adminpanel", context!{appointments: appointments}));
+            return Ok(Template::render("adminpanel", context!{appointments: appointments, users: users}));
         } 
         _ => {
             Err(Redirect::to(uri!(adminlogin())))
