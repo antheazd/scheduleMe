@@ -1,4 +1,11 @@
 {% extends "base" %}
 {% block content %}
 
+<div id="payments"></div>
+<script>
+    var appointments = {{ appointments }};
+</script>
+
+<script src="static/sharedComponents/payment.js" type="text/babel"></script>
+<script src="static/sharedComponents/payments.js" type="text/babel"></script>
 {% endblock content %}

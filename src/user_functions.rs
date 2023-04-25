@@ -301,7 +301,7 @@ pub async fn add_appointment(appointment: Form<appointment::Appointment>, mut db
             let user_id = id.value().to_string().parse::<i64>().unwrap();
             println!("{}", appointment.get_day());
 
-            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 100);"#)
+            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price, paid) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 100, false);"#)
                 .bind(user_id)
                 .bind(appointment.get_day())
                 .bind(appointment.get_start_hour())
@@ -328,11 +328,54 @@ pub async fn add_appointment(appointment: Form<appointment::Appointment>, mut db
 }
 
 #[get("/payments")]
-pub async fn payments(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
-    if cookies.get_private("id").is_some(){
-        return Ok(Template::render("payments", context! {}))
+pub async fn payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
+    let mut id_cookie = cookies.get_private("id");
+
+    match id_cookie {
+        Some(id) => {
+
+            let user_id = id.value().to_string().parse::<i64>().unwrap();
+
+            let mut appointments: Vec<String> = Vec::new();
+            
+            let query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, paid  FROM appointments WHERE user_id = $1"#)
+                .bind(user_id)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            for row in query{
+                let mut s: String = String::new();
+
+                let id: i64 = row.get("id");
+                let day: String = row.get("day");
+                let start_hour: i32 = row.get("start_hour");
+                let start_minute: i32 = row.get("start_minute");
+                let duration: String = row.get("duration");
+		        let price: f32 = row.get("price");
+		        let paid: bool = row.get("paid");
+
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {}, \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(paid), paid);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                appointments.push(s);
+            }
+
+            for i in &appointments{
+                println!("{:?}", i);
+            }
+
+            return Ok(Template::render("payments", context!{appointments: appointments}));
+        } 
+        _ => {
+            Err(Redirect::to(uri!(login())))
+        }
     }
-    Err(Redirect::to(uri!(login())))
 }
 
 #[get("/login")]
