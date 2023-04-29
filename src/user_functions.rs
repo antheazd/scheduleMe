@@ -378,6 +378,39 @@ pub async fn payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Resu
     }
 }
 
+#[post("/payments", data = "<response>")]
+pub async fn add_payment(response: String, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
+    let mut id_cookie = cookies.get_private("id");
+    match id_cookie {
+        Some(id) => {
+            
+            let parsed = json::parse(&response).unwrap();
+            println!("{}", parsed["paymentToken"]);
+
+            let appointment_id = parsed["id"].to_string();
+            
+            let update_appointment = sqlx::query(r#"UPDATE appointments SET paid = true WHERE id = $1;"#)
+                .bind(appointment_id)
+                .fetch_one(&mut *db)
+                .await;
+            
+            match update_appointment{
+                Ok(d) => {
+                    println!("inserted");
+                }
+                Err(e) => {
+                    println!("{}", e.to_string());
+                }
+            }
+            return Ok(Redirect::to(uri!(payments())));
+        }
+        None => {
+            println!("no id");
+            return Ok(Redirect::to(uri!(login())));
+        }
+    }
+}
+
 #[get("/login")]
 pub fn login() -> Template {
     Template::render("login", context! {

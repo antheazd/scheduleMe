@@ -17,7 +17,7 @@ class AddAppointment extends React.Component {
   render() {
     return (
         <div>
-          <div className="center"><button className="ui basic button" onClick={this.updateState}>Add appointment</button></div>    
+          <div className="center"><button className="ui basic button" onClick={this.updateState} style={{ margin: "4px"}}>Add appointment</button></div>    
 
           {this.state.visibility ?
           <div className="ui center aligned container">
