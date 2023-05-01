@@ -376,9 +376,147 @@ pub async fn add_admin_message(message: Form<Message>, mut db: Connection<Logs>,
 }
 
 #[get("/adminpayments")]
-pub async fn adminpayments(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
-    if cookies.get_private("id").is_some(){
-        return Ok(Template::render("adminpayments", context! {}))
+pub async fn adminpayments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
+    let mut id_cookie = cookies.get_private("id");
+
+    match id_cookie {
+        Some(id) => {
+
+            let mut appointments: Vec<String> = Vec::new();
+            let mut users: Vec<String> = Vec::new();
+            
+            let appointments_query = sqlx::query(r#"SELECT appointments.id, user_id, name, surname, CAST(appointments.day AS VARCHAR), start_hour, start_minute, price, paid FROM appointments JOIN users ON user_id = users.id WHERE paid = false ORDER BY day ASC, start_hour ASC, start_minute ASC;"#)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            for row in appointments_query{
+                let mut s: String = String::new();
+
+                let id: i64 = row.get("id");
+                let user_id: i64 = row.get("user_id");
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
+                let day: String = row.get("day");
+                let start_hour: i32 = row.get("start_hour");
+                let start_minute: i32 = row.get("start_minute");
+                let price: f32 = row.get("price");
+                let paid: bool = row.get("paid");
+
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": {}, \"{}\": \"{}\",\"{}\": \"{}\",\"{}\": \"{}\",\"{}\": {},\"{}\": {},\"{}\": {},\"{}\": {}", stringify!(id), id, stringify!(user_id), user_id, stringify!(name), name, stringify!(surname), surname, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(price), price, stringify!(paid), paid);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                appointments.push(s);
+            }
+
+            for i in &appointments{
+                println!("{:?}", i);
+            }
+
+            let users_query = sqlx::query(r#"SELECT id, name, surname FROM users ORDER BY name ASC, surname ASC;"#)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            for row in users_query{
+                let mut s: String = String::new();
+
+                let id: i64 = row.get("id");
+                let name: String = row.get("name");
+                let surname: String = row.get("surname");
+
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\"", stringify!(id), id, stringify!(name), name, stringify!(surname), surname);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                users.push(s);
+            }
+
+            for i in &users{
+                println!("{:?}", i);
+            }
+
+            return Ok(Template::render("adminpayments", context!{appointments: appointments, users: users}));
+        } 
+        _ => {
+            Err(Redirect::to(uri!(adminlogin())))
+        }
     }
-    Err(Redirect::to(uri!(adminlogin())))
+}
+
+#[get("/adminpayments/<user_id>")]
+pub async fn user_payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>, user_id: i64) -> Result<Template, Redirect> {
+    let mut id_cookie = cookies.get_private("id");
+
+    match id_cookie {
+        Some(id) => {
+            
+            let mut user_info: Vec<String> = Vec::new();
+            let mut appointments: Vec<String> = Vec::new();
+            
+            let appointments_query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, paid  FROM appointments WHERE user_id = $1"#)
+                .bind(user_id)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            for row in appointments_query{
+                let mut s: String = String::new();
+
+                let id: i64 = row.get("id");
+                let day: String = row.get("day");
+                let start_hour: i32 = row.get("start_hour");
+                let start_minute: i32 = row.get("start_minute");
+                let duration: String = row.get("duration");
+		        let price: f32 = row.get("price");
+		        let paid: bool = row.get("paid");
+
+                s.push('{');
+
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {}, \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(paid), paid);
+                
+                s.push_str(&full_str);
+
+                s.push('}');
+
+                appointments.push(s);
+            }
+
+            for i in &appointments{
+                println!("{:?}", i);
+            }
+
+            let user_info_query = sqlx::query(r#"SELECT name, surname FROM users WHERE id = $1"#)
+                .bind(user_id)
+                .fetch_all(&mut *db)
+                .await
+                .unwrap();
+
+            let mut user_info_str = String::new();
+            let name: String = user_info_query[0].get("name");
+            let surname: String = user_info_query[0].get("surname");
+            
+            user_info_str.push('{');
+            user_info_str.push_str(&format!("\"name\": \"{}\", \"surname\": \"{}\"", name, surname));
+            user_info_str.push('}');
+
+            user_info.push(user_info_str);
+
+            println!("{:?}", user_info);
+
+            return Ok(Template::render("adminpayment", context!{appointments: appointments, user_info: user_info}));
+        } 
+        _ => {
+            Err(Redirect::to(uri!(adminlogin())))
+        }
+    }
 }

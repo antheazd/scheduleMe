@@ -1,3 +1,11 @@
 {% extends "adminbase" %}
 {% block content %}
+
+<div id="payments"></div>
+<script>
+    var appointments = {{ appointments }};
+    var users = {{ users }};
+</script>
+
+<script src="/static/adminComponents/allUserPayments.js" type="text/babel"></script>
 {% endblock content %}
