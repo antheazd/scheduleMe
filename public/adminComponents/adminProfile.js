@@ -11,9 +11,6 @@ class AdminProfile extends React.Component {
         <div className="profile_container">
           <div className="ui items">
           <div className="item">
-              <div className="ui medium circular image">
-              <img src="static/photos/user.png" className="ui medium circular image"/>
-              </div>
               <div className="content">
                 <h3 className="ui header"> Name</h3><br></br>
                   {window.context[0].name} {window.context[0].surname}
