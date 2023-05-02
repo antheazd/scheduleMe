@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-use sqlx::types::chrono;
 
 #[derive(FromForm, Debug, Serialize, Deserialize, Clone)]
 pub struct Message{

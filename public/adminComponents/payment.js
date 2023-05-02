@@ -4,6 +4,9 @@ class Payment extends React.Component {
   constructor(props) {
     super(props);
   }
+  appointment_id(){
+    return this.props.id.toString();
+  }
 
   render() {
     
@@ -40,7 +43,10 @@ class Payment extends React.Component {
         </div>
         {!this.props.paid?
             <div className="extra content">
-            xy
+                <form method="post">
+                    <input type="hidden" id="id" name="id" value={this.appointment_id()}/>
+                    <button className="ui blue button">Mark as paid</button>
+                </form>
             </div>
         :null}
       </div>

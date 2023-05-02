@@ -520,3 +520,34 @@ pub async fn user_payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>, us
         }
     }
 }
+
+#[post("/adminpayments/<user_id>", data = "<app_id>")]
+pub async fn set_as_paid(mut db: Connection<Logs>, cookies: &CookieJar<'_>, user_id: i64, app_id: String) -> Result<Redirect, Template>{
+    let id_cookie = cookies.get_private("id");
+    match id_cookie {
+        Some(id) => {
+
+            let appointment_id: i64 = app_id.replace("id=", "").parse().unwrap();
+            let set_paid = sqlx::query(r#"UPDATE appointments SET paid = true WHERE id = $1;"#)
+                .bind(&appointment_id)
+                .fetch_one(&mut *db)
+                .await;
+
+            println!("App id: {}", &appointment_id);
+            
+            match set_paid{
+                Ok(d) => {
+                    println!("sent");
+                }
+                Err(e) => {
+                    println!("{}", e.to_string());
+                }
+            }
+            return Ok(Redirect::to(uri!(user_payments(user_id))));
+        }
+        None => {
+            println!("no id");
+            return Ok(Redirect::to(uri!(adminlogin())));
+        }
+    }
+}
