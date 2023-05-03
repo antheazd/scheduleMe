@@ -56,6 +56,7 @@ class Appointment extends React.Component {
     if(Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))){
       this.setState({ before_separator_display: false });
       this.setState({ after_separator_display: false });
+      this.props.add_appointment(this.props.day, this.props.start_hour, this.props.start_minute, this.props.duration, this.state.duration);
       return;
     }
 
@@ -77,6 +78,7 @@ class Appointment extends React.Component {
   callback(response, status) {
     if (status === 'OK') {
       this.setState({ duration: response.rows[0].elements[0].duration.value });
+      this.props.add_appointment(this.props.day, this.props.start_hour, this.props.start_minute, this.props.duration, this.state.duration);
     }else {
       console.error('Error:', status);
       }
