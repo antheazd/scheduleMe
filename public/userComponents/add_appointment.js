@@ -3,16 +3,57 @@
 class AddAppointment extends React.Component {
   constructor() {
     super();
-    this.state = {visibility: false}
+    this.state = {
+      visibility: false,
+      error: ""
+    }
+    this.updateState = this.updateState.bind(this);
     this.updateState = this.updateState.bind(this)}
 
-    updateState(){ 
-      if(this.state.visibility == true){
-        this.setState({visibility: false}) }
-      else{
-        this.setState({visibility: true}) 
-      }
+  updateState(){ 
+    if(this.state.visibility == true){
+      this.setState({visibility: false}) }
+    else{
+      this.setState({visibility: true}) 
     }
+  }
+
+  duration_in_minutes(duration){
+  switch(duration){
+    case "45min":
+      return 45;
+    case "1h":
+      return 60;
+    case "2h":
+      return 120;
+    }
+  }
+  //appointment exists, event new
+
+  checkOverlap(appointment, event){
+
+    var new_start = (parseInt(event.target.start_hour.value) * 60) + parseInt(event.target.start_minute.value);
+    var new_end = (parseInt(event.target.start_hour.value) * 60) + parseInt(event.target.start_minute.value) + this.duration_in_minutes(event.target.duration.value);
+  
+    if(appointment.day == event.target.day.value && ((appointment.start <= new_start && new_start <= appointment.end) || (appointment.start <= new_end && new_end <= appointment.end))) return 1;
+    
+    return 0;
+  }
+
+  handleSubmit = (event) => {
+    var overlap = 0;
+    console.log(this.props.appointments);
+    for(let i = 0; i < this.props.appointments.length; i++){
+      overlap += this.checkOverlap(this.props.appointments[i], event);
+    }
+    if(overlap > 0) {
+      this.setState({error: "Other appointment already reserved for chosen time"});
+      event.preventDefault();
+    }
+    
+    else return;
+  }
+
 
   render() {
     return (
@@ -21,11 +62,11 @@ class AddAppointment extends React.Component {
         {this.state.visibility ?
           <div className="half_page">
           <div className="ui attached message">
-          <i class="close icon" onClick={this.updateState}></i>
+          <i className="close icon" onClick={this.updateState}></i>
           <div className="content">
           <div className="header">Add your appointment</div>
               <p>Fill out the form below</p></div></div>
-              <form className="ui form attached fluid segment" method="post" href="/schedule">
+              <form className="ui form attached fluid segment" method="post" href="/schedule" onSubmit={this.handleSubmit}>
                   <div className="equal width fields">
 
                     <div className="field">
@@ -34,7 +75,7 @@ class AddAppointment extends React.Component {
                     </div>
 
                     <div className="field">
-                      <label>Sat</label>
+                      <label>Hour</label>
                       <select id="start_hour" name="start_hour">
                         <option value="8">8</option>
                         <option value="9">9</option>
@@ -141,6 +182,7 @@ class AddAppointment extends React.Component {
                     </div>
                   </div>  
 
+                  <span style={{ color: "red" }}>{ this.state.error }</span>
                   <button className="ui blue button">Submit</button>
               </form>
               </div>
