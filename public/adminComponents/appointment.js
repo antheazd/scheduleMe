@@ -116,7 +116,7 @@ class Appointment extends React.Component {
                 <div className="ui attached message" style={{ zIndex : "200" }}>
                 <div className="content">
                 <i class="close icon" onClick={this.updateState}></i>
-                <div className="header">Appointment</div>
+                <div className="header">{ this.props.kind }</div>
                     <p>{ this.props.name } { this.props.surname }</p></div></div>
                     <form className="ui form attached fluid segment" method="post">
                         <div className="equal width fields">
@@ -145,7 +145,7 @@ class Appointment extends React.Component {
                             </div>
 
                             <div className="field">
-                            <label>Location</label>
+                              <label>Location</label>
                                 <a href={ this.location_link() }>Location</a>
                             </div>
 

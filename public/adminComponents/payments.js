@@ -26,7 +26,7 @@ class Payments extends React.Component {
         <div className="ui cards centered">
         {window.appointments.filter((x)=> x.paid === false).map(i => 
             <div key={i.id} className="field">
-                <Payment id={i.id} day={i.day} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} price={i.price} paid={i.paid} />
+                <Payment id={i.id} day={i.day} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} price={i.price} kind={i.kind} paid={i.paid} />
             </div>
             )}
         </div>
@@ -41,7 +41,7 @@ class Payments extends React.Component {
         {window.appointments.filter((x)=> x.paid === true).map(i => 
             <div key={i.id} className="field">
                 <div className="ui cards" style={{ display: "inline"}}>
-                <Payment id={i.id} day={i.day} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} price={i.price} paid={i.paid} />
+                <Payment id={i.id} day={i.day} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} price={i.price} kind={i.kind} paid={i.paid} />
               </div>
             </div>
             )}

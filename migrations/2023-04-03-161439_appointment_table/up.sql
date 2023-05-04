@@ -6,6 +6,7 @@ CREATE TABLE appointments (
     start_hour integer,
     start_minute integer,
     duration varchar(255) not null,
+    kind varchar(255) not null,
     price real,
     paid boolean
 );
