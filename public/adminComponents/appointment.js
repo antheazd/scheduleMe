@@ -107,7 +107,7 @@ class Appointment extends React.Component {
     return (
       <div>
         {this.state.appointment_display?
-            <div onClick={this.updateState} className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}>{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}</div>
+            <div onClick={this.updateState} className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}>{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}<br></br>{this.props.name} {this.props.surname}</div>
         :null }
 
         {this.state.display 
