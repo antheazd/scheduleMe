@@ -163,7 +163,7 @@ class Appointment extends React.Component {
     return (
       <div>
         {this.state.appointment_display?
-          <div className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}>{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}</div>
+          <div className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}><span className="appointment_time">{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}</span></div>
         :null }
 
         {this.state.before_separator_display?
