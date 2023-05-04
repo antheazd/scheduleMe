@@ -56,18 +56,19 @@ pub async fn adminpanel(appointment: Form<appointment::Appointment>, mut db: Con
     match id_cookie {
         Some(id) => {
 
-            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 100);"#)
+            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, kind, price, paid) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, $6, 10, false);"#)
                 .bind(appointment.get_id())
                 .bind(appointment.get_day())
                 .bind(appointment.get_start_hour())
                 .bind(appointment.get_start_minute())
                 .bind(appointment.get_duration())
+                .bind(appointment.get_kind())
                 .fetch_one(&mut *db)
                 .await;
             
             match add_appointment{
                 Ok(d) => {
-                    println!("inserted");
+                    println!("Inserted");
                 }
                 Err(e) => {
                     println!("{}", e.to_string());
@@ -92,7 +93,7 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
             let mut appointments: Vec<String> = Vec::new();
             let mut users: Vec<String> = Vec::new();
             
-            let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, locations.id, locations.description, locations.user_id, locations.alt, locations.lng, users.name, users.surname FROM appointments JOIN locations ON appointments.user_id = locations.user_id JOIN users ON users.id = appointments.user_id WHERE appointments.day > CURRENT_DATE;"#)
+            let query = sqlx::query(r#"SELECT appointments.id AS appointment_id, appointments.user_id, CAST(appointments.day AS VARCHAR), appointments.start_hour, appointments.start_minute, appointments.duration, appointments.price, appointments.kind, locations.id, locations.description, locations.user_id, locations.alt, locations.lng, users.name, users.surname FROM appointments JOIN locations ON appointments.user_id = locations.user_id JOIN users ON users.id = appointments.user_id WHERE appointments.day > CURRENT_DATE;"#)
                 .fetch_all(&mut *db)
                 .await
                 .unwrap();
@@ -110,10 +111,11 @@ pub async fn adminpanelget(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
                 let name: String = row.get("name");
                 let surname: String = row.get("surname");
                 let price: f32 = row.get("price");
+                let kind: String = row.get("kind");
 
                 s.push('{');
 
-                let full_str = format!("\"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}, \"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\", \"{}\": {}", stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(alt), alt, stringify!(lng), lng, stringify!(appointment_id), appointment_id, stringify!(name), name, stringify!(surname), surname, stringify!(price), price);
+                let full_str = format!("\"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}, \"{}\": {}, \"{}\": \"{}\", \"{}\": \"{}\", \"{}\": {}, \"{}\": \"{}\"", stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(alt), alt, stringify!(lng), lng, stringify!(appointment_id), appointment_id, stringify!(name), name, stringify!(surname), surname, stringify!(price), price, stringify!(kind), kind);
                 
                 s.push_str(&full_str);
 
@@ -385,7 +387,7 @@ pub async fn adminpayments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
             let mut appointments: Vec<String> = Vec::new();
             let mut users: Vec<String> = Vec::new();
             
-            let appointments_query = sqlx::query(r#"SELECT appointments.id, user_id, name, surname, CAST(appointments.day AS VARCHAR), start_hour, start_minute, price, paid FROM appointments JOIN users ON user_id = users.id WHERE paid = false ORDER BY day ASC, start_hour ASC, start_minute ASC;"#)
+            let appointments_query = sqlx::query(r#"SELECT appointments.id, user_id, name, surname, CAST(appointments.day AS VARCHAR), start_hour, start_minute, price, kind, paid FROM appointments JOIN users ON user_id = users.id WHERE paid = false ORDER BY day ASC, start_hour ASC, start_minute ASC;"#)
                 .fetch_all(&mut *db)
                 .await
                 .unwrap();
@@ -400,12 +402,13 @@ pub async fn adminpayments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) ->
                 let day: String = row.get("day");
                 let start_hour: i32 = row.get("start_hour");
                 let start_minute: i32 = row.get("start_minute");
+                let kind: String = row.get("kind");
                 let price: f32 = row.get("price");
                 let paid: bool = row.get("paid");
 
                 s.push('{');
 
-                let full_str = format!("\"{}\": {}, \"{}\": {}, \"{}\": \"{}\",\"{}\": \"{}\",\"{}\": \"{}\",\"{}\": {},\"{}\": {},\"{}\": {},\"{}\": {}", stringify!(id), id, stringify!(user_id), user_id, stringify!(name), name, stringify!(surname), surname, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(price), price, stringify!(paid), paid);
+                let full_str = format!("\"{}\": {}, \"{}\": {}, \"{}\": \"{}\",\"{}\": \"{}\",\"{}\": \"{}\",\"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {},\"{}\": {}", stringify!(id), id, stringify!(user_id), user_id, stringify!(name), name, stringify!(surname), surname, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(kind), kind, stringify!(price), price, stringify!(paid), paid);
                 
                 s.push_str(&full_str);
 
@@ -463,7 +466,7 @@ pub async fn user_payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>, us
             let mut user_info: Vec<String> = Vec::new();
             let mut appointments: Vec<String> = Vec::new();
             
-            let appointments_query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, paid  FROM appointments WHERE user_id = $1"#)
+            let appointments_query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, kind, paid  FROM appointments WHERE user_id = $1"#)
                 .bind(user_id)
                 .fetch_all(&mut *db)
                 .await
@@ -478,11 +481,12 @@ pub async fn user_payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>, us
                 let start_minute: i32 = row.get("start_minute");
                 let duration: String = row.get("duration");
 		        let price: f32 = row.get("price");
+                let kind: String = row.get("kind");
 		        let paid: bool = row.get("paid");
 
                 s.push('{');
 
-                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {}, \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(paid), paid);
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\", \"{}\": {}, \"{}\": \"{}\", \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(kind), kind, stringify!(paid), paid);
                 
                 s.push_str(&full_str);
 

@@ -36,7 +36,7 @@ class Schedule extends React.Component{
                         <ul>
                           {window.appointments.map(i => 
                             <div key={i.appointment_id}>
-                                <Appointment key={i.appointment_id} extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price}/>
+                                <Appointment key={i.appointment_id} extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price} kind={i.kind}/>
                             </div>
                             )}
                         </ul>

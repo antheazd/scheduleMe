@@ -36,7 +36,7 @@ class AddAppointment extends React.Component {
                         </div>
 
                         <div className="field">
-                          <label>Sat</label>
+                          <label>Hour</label>
                           <select id="start_hour" name="start_hour">
                             <option value="8">8</option>
                             <option value="9">9</option>
@@ -124,7 +124,7 @@ class AddAppointment extends React.Component {
                   <div className="equal width fields">
                     
                         <div className="field">
-                        <label>Trajanje</label>
+                        <label>Duration</label>
                           <select id="duration" name="duration">
                           <option value="2h">2 hours</option>
                             <option value="1h">1 hour</option>
@@ -134,11 +134,11 @@ class AddAppointment extends React.Component {
                       
 
                         <div className="field">
-                          <label>Vrsta</label>
-                          <select id="type" name="type">
-                            <option value="Fizikalna terapija">Fizikalna terapija</option>
-                            <option value="Trening">Trening</option>
-                            <option value="Masaza">Masaža</option>
+                          <label>Kind</label>
+                          <select id="kind" name="kind">
+                            <option value="Physical therapy">Physical therapy</option>
+                            <option value="Gym workout">Gym workout</option>
+                            <option value="Massage">Massage</option>
                           </select>
                         </div>
                       </div>  

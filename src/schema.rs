@@ -20,6 +20,7 @@ diesel::table! {
         start_minute -> Nullable<Int4>,
         duration -> Varchar,
         price -> Nullable<Float4>,
+        kind -> Varchar,
         paid -> Nullable<Bool>,
     }
 }

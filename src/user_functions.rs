@@ -303,12 +303,13 @@ pub async fn add_appointment(appointment: Form<appointment::Appointment>, mut db
             let user_id = id.value().to_string().parse::<i64>().unwrap();
             println!("{}", appointment.get_day());
 
-            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price, paid) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 100, false);"#)
+            let add_appointment = sqlx::query(r#"INSERT INTO appointments (user_id, day, start_hour, start_minute, duration, price, kind, paid) VALUES ($1, TO_DATE($2,'YYYY-MM-DD'), $3, $4, $5, 20, $6, false);"#)
                 .bind(user_id)
                 .bind(appointment.get_day())
                 .bind(appointment.get_start_hour())
                 .bind(appointment.get_start_minute())
                 .bind(appointment.get_duration())
+                .bind(appointment.get_kind())
                 .fetch_one(&mut *db)
                 .await;
             
@@ -340,7 +341,7 @@ pub async fn payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Resu
 
             let mut appointments: Vec<String> = Vec::new();
             
-            let query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, paid  FROM appointments WHERE user_id = $1"#)
+            let query = sqlx::query(r#"SELECT id, CAST(day AS VARCHAR), start_hour, start_minute, duration, price, kind, paid  FROM appointments WHERE user_id = $1"#)
                 .bind(user_id)
                 .fetch_all(&mut *db)
                 .await
@@ -355,11 +356,12 @@ pub async fn payments(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Resu
                 let start_minute: i32 = row.get("start_minute");
                 let duration: String = row.get("duration");
 		        let price: f32 = row.get("price");
+                let kind: String = row.get("kind");
 		        let paid: bool = row.get("paid");
 
                 s.push('{');
 
-                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\",\"{}\": {}, \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(paid), paid);
+                let full_str = format!("\"{}\": {}, \"{}\": \"{}\", \"{}\": {},\"{}\": {},\"{}\": \"{}\", \"{}\": {}, \"{}\": \"{}\", \"{}\": {}", stringify!(id), id, stringify!(day), day, stringify!(start_hour), start_hour, stringify!(start_minute), start_minute, stringify!(duration), duration, stringify!(price), price, stringify!(kind), kind, stringify!(paid), paid);
                 
                 s.push_str(&full_str);
 

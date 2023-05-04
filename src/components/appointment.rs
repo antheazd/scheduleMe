@@ -9,6 +9,7 @@ pub struct Appointment{
     start_hour: i32,
     start_minute: i32,
     duration: String,
+    kind: String,
     price: Option<f32>
 }
 
@@ -31,10 +32,13 @@ impl Appointment{
     pub fn get_duration(&self) -> &String{
         &self.duration
     }
+    pub fn get_kind(&self)-> &String{
+        &self.kind
+    }
     pub fn get_price(&self) -> &Option<f32>{
         &self.price
     }
-    pub fn new(id: Option<i64>, user_id: Option<i64>, day: String, start_hour: i32, start_minute: i32, duration: String, price: Option<f32>)-> Self {
+    pub fn new(id: Option<i64>, user_id: Option<i64>, day: String, start_hour: i32, start_minute: i32, duration: String, kind: String, price: Option<f32>)-> Self {
         Self{ 
              id,
              user_id,
@@ -42,6 +46,7 @@ impl Appointment{
              start_hour,
              start_minute,
              duration,
+             kind,
              price}
     } 
     } 
