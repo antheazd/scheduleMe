@@ -2,6 +2,7 @@
 {% block content %}
 
 <div id="payments"></div>
+
 <script>
     var appointments = {{ appointments }};
     var user_info = {{ user_info }};

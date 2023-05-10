@@ -11,9 +11,10 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
   <body>
-      <div id="loginform" type="text/babel"></div>
-      
-      <script src="static/sharedComponents/button.js" type="text/babel"></script>
-      <script src="static/sharedComponents/loginform.js" type="text/babel"></script>
+  
+    <div id="loginform" type="text/babel"></div>
+    
+    <script src="static/sharedComponents/button.js" type="text/babel"></script>
+    <script src="static/sharedComponents/loginform.js" type="text/babel"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 'use strict';
 
-class Schedule extends React.Component{
+class Schedule extends React.Component {
 
     constructor() {
         super();
@@ -11,42 +11,42 @@ class Schedule extends React.Component{
         this.previousWeek = this.previousWeek.bind(this);
     }
 
-    nextWeek(){ 
-            var z = this.state.extra_weeks + 1;
-            this.setState({extra_weeks: z});
-              }
-        
-    previousWeek(){
-            var z = this.state.extra_weeks;
-            if(z > 0){
-              z--;
-              this.setState({extra_weeks: z});
-            }
+    nextWeek() {
+        var z = this.state.extra_weeks + 1;
+        this.setState({ extra_weeks: z });
+    }
+
+    previousWeek() {
+        var z = this.state.extra_weeks;
+        if (z > 0) {
+            z--;
+            this.setState({ extra_weeks: z });
         }
-    render(){
-                return(
-                    <div>
-                        <div aria-label="Pagination Navigation" role="navigation" className="ui pagination menu">
-                            <a aria-current="false" aria-disabled="false" tabIndex="0" value="1" aria-label="Previous item" type="prevItem" className="item" onClick={this.previousWeek}>⟨</a>
-                            <a aria-current="false" aria-disabled="false" tabIndex="0" value="2" aria-label="Next item" type="nextItem" className="item" onClick={this.nextWeek}>⟩</a>
-                        </div> 
-                        <div className="table_div">
-                            <Table extra_weeks={this.state.extra_weeks}/>
-                            <br></br>
-                        <ul>
-                          {window.appointments.map(i => 
+    }
+    render() {
+        return (
+            <div>
+                <div aria-label="Pagination Navigation" role="navigation" className="ui pagination menu">
+                    <a aria-current="false" aria-disabled="false" tabIndex="0" value="1" aria-label="Previous item" type="prevItem" className="item" onClick={this.previousWeek}>⟨</a>
+                    <a aria-current="false" aria-disabled="false" tabIndex="0" value="2" aria-label="Next item" type="nextItem" className="item" onClick={this.nextWeek}>⟩</a>
+                </div>
+                <div className="table_div">
+                    <Table extra_weeks={this.state.extra_weeks} />
+                    <br></br>
+                    <ul>
+                        {window.appointments.map(i =>
                             <div key={i.appointment_id}>
-                                <Appointment key={i.appointment_id} extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price} kind={i.kind}/>
+                                <Appointment key={i.appointment_id} extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} name={i.name} surname={i.surname} price={i.price} kind={i.kind} />
                             </div>
-                            )}
-                        </ul>
-                        </div>
-                        <br></br>
-                        <AddAppointment />
-                        <br></br>
-                    </div>
-                )
-            }
+                        )}
+                    </ul>
+                </div>
+                <br></br>
+                <AddAppointment />
+                <br></br>
+            </div>
+        )
+    }
 }
 
 let container = document.getElementById('schedule');

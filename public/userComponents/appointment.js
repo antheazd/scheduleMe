@@ -14,46 +14,46 @@ class Appointment extends React.Component {
     this.callback = this.callback.bind(this);
   }
 
-  componentDidUpdate(){
-    if(this.props.extra_weeks != this.state.extra_weeks){
-      this.setState({extra_weeks: this.props.extra_weeks});
+  componentDidUpdate() {
+    if (this.props.extra_weeks != this.state.extra_weeks) {
+      this.setState({ extra_weeks: this.props.extra_weeks });
       this.check_visibility();
     }
   }
 
-  check_visibility(){
+  check_visibility() {
     var extra_days = Number(this.extra_days());
-    if((extra_days >= 0) && (extra_days < 7)) {
-      this.setState({before_separator_display: true});
-      this.setState({after_separator_display: true});
-      this.setState({appointment_display: true});
+    if ((extra_days >= 0) && (extra_days < 7)) {
+      this.setState({ before_separator_display: true });
+      this.setState({ after_separator_display: true });
+      this.setState({ appointment_display: true });
     }
-    else{
-      this.setState({before_separator_display: false});
-      this.setState({after_separator_display: false});
-      this.setState({appointment_display: false});
+    else {
+      this.setState({ before_separator_display: false });
+      this.setState({ after_separator_display: false });
+      this.setState({ appointment_display: false });
     }
-    if(this.props.start_hour == 8){
-      this.setState({before_separator_display: false});
+    if (this.props.start_hour == 8) {
+      this.setState({ before_separator_display: false });
     }
-    if(Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))){
+    if (Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))) {
       this.setState({ before_separator_display: false });
       this.setState({ after_separator_display: false });
     }
-    if(this.end_time() >= "21:00"){
-      this.setState({after_separator_display: false});
+    if (this.end_time() >= "21:00") {
+      this.setState({ after_separator_display: false });
     }
   }
 
   componentDidMount() {
 
-    this.setState({extra_weeks: this.props.extra_weeks});
+    this.setState({ extra_weeks: this.props.extra_weeks });
     this.check_visibility();
 
     const destination = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
     const origin = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
 
-    if(Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))){
+    if (Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))) {
       this.setState({ before_separator_display: false });
       this.setState({ after_separator_display: false });
       this.props.add_appointment(this.props.day, this.props.start_hour, this.props.start_minute, this.props.duration, this.state.duration);
@@ -79,26 +79,26 @@ class Appointment extends React.Component {
     if (status === 'OK') {
       this.setState({ duration: response.rows[0].elements[0].duration.value });
       this.props.add_appointment(this.props.day, this.props.start_hour, this.props.start_minute, this.props.duration, this.state.duration);
-    }else {
+    } else {
       console.error('Error:', status);
-      }
+    }
   }
-  
+
   extra_days() {
     var monday = new Date();
     monday.setDate(monday.getDate() + (((1 - monday.getDay()) % 7) || 7) + (this.props.extra_weeks * 7));
     var day = new Date(this.props.day);
-    if((day.getMonth() != monday.getMonth()) || (day.getFullYear() != monday.getFullYear())) return -1;
+    if ((day.getMonth() != monday.getMonth()) || (day.getFullYear() != monday.getFullYear())) return -1;
     return day.getDate() - monday.getDate();
   }
 
   right() {
-    var days = (6 - this.extra_days(this.props.day)) *  12.49 + 0.02;
+    var days = (6 - this.extra_days(this.props.day)) * 12.49 + 0.02;
     return days + '%';
   }
 
   appointment_height() {
-    switch(this.props.duration){
+    switch (this.props.duration) {
       case "45min":
         return 0.75 * 8 + '%';
       case "1h":
@@ -110,14 +110,14 @@ class Appointment extends React.Component {
     }
   }
 
-  separator_height(){
+  separator_height() {
     var seconds = parseInt(this.state.duration);
 
     var hour = Math.floor(seconds / 3600);
     seconds -= hour * 3600;
     var minute = Math.ceil(seconds / 60);
 
-    return ((hour +  (minute / 60)) * 8) + '%';
+    return ((hour + (minute / 60)) * 8) + '%';
   }
 
   top() {
@@ -162,22 +162,22 @@ class Appointment extends React.Component {
   render() {
     return (
       <div>
-        {this.state.appointment_display?
+        {this.state.appointment_display ?
           <div className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}><span className="appointment_time">{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}</span></div>
-        :null }
+          : null}
 
-        {this.state.before_separator_display?
+        {this.state.before_separator_display ?
           <BeforeSeparator right={this.right()} extra_days={this.extra_days} duration={this.state.duration} separator_height={this.separator_height()}
             end_time={this.start_time()} appointment_start={this.top()}
           />
-        :null } 
+          : null}
 
-        {this.state.after_separator_display?
-          <AfterSeparator right={this.right()} extra_days={this.extra_days} duration={this.state.duration} separator_height={this.separator_height()} 
+        {this.state.after_separator_display ?
+          <AfterSeparator right={this.right()} extra_days={this.extra_days} duration={this.state.duration} separator_height={this.separator_height()}
             start_time={this.end_time()} appointment_start={this.top()} appointment_height={this.appointment_height()}
           />
-        :null }
-      
+          : null}
+
       </div>
     );
   }

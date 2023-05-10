@@ -6,9 +6,9 @@ class Payment extends React.Component {
   }
 
   render() {
-    
+
     return (
-        <div className="ui card" style={{ margin: "4px"}}>
+      <div className="ui card" style={{ margin: "4px" }}>
         <div className="content">
           <div className="header">{this.props.kind}</div>
         </div>
@@ -25,24 +25,25 @@ class Payment extends React.Component {
             <div className="event">
               <div className="content">
                 <div className="summary">
-                    Duration: {this.props.duration}
+                  Duration: {this.props.duration}
                 </div>
               </div>
             </div>
             <div className="event">
               <div className="content">
                 <div className="summary">
-                    Price: {this.props.price} EUR
+                  Price: {this.props.price} EUR
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {!this.props.paid?
-            <div className="extra content">
+        {!this.props.paid ?
+          <div className="extra content">
             <GooglePayButton id={this.props.id} price={this.props.price} />
-            </div>
-        :null}
+          </div>
+          : null}
       </div>
-    );}
+    );
+  }
 }
