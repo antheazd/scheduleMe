@@ -39,7 +39,7 @@ class AfterSeparator extends React.Component {
     render() {
       return (
         <div>
-            <div className="ui visible message" style={{ height: this.props.separator_height, right:this.props.right, top: this.separator_top() }}><span className="vertical_center">{ this.props.start_time } - { this.separator_end_time() }</span></div>
+            <div className="ui visible message" style={{ height: this.props.separator_height, right:this.props.right, top: this.separator_top() }}><span className="separator_time">{ this.props.start_time } - { this.separator_end_time() }</span></div>
         </div>
       );}
   }

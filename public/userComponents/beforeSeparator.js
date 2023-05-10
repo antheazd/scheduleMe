@@ -37,7 +37,7 @@ class BeforeSeparator extends React.Component {
   render() {
     return (
       <div>
-        <div className="ui visible message" style={{ height: this.props.separator_height, right:this.props.right, bottom: this.separator_top() }}>{ this.start_time() } - { this.props.end_time }</div>
+        <div className="ui visible message" style={{ height: this.props.separator_height, right:this.props.right, bottom: this.separator_top() }}><span className="separator_time">{ this.start_time() } - { this.props.end_time }</span></div>
       </div>
     );}
 }
