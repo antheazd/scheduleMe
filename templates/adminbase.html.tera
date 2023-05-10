@@ -14,9 +14,12 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
-  <div id="navbar" type="text/babel"></div>
-  {% block content %}{% endblock content %}
-  <script src="/static/sharedComponents/button.js" type="text/babel"></script>
-  <script src="/static/adminComponents/navbar.js" type="text/babel"></script>
-</body>
+
+    <div id="navbar" type="text/babel"></div>
+
+    {% block content %}{% endblock content %}
+
+    <script src="/static/sharedComponents/button.js" type="text/babel"></script>
+    <script src="/static/adminComponents/navbar.js" type="text/babel"></script>
+  </body>
 </html>

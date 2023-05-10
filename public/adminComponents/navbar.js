@@ -6,7 +6,7 @@ class Navbar extends React.Component {
   }
 
   render() {
-    
+
     return (
       <div className="ui secondary menu">
         <a className="active item" href="/adminpanel">Schedule</a>
@@ -17,7 +17,8 @@ class Navbar extends React.Component {
           <Button href="/adminlogout" label="Log out" />
         </div>
       </div>
-    );}
+    );
+  }
 }
 
 let container = document.getElementById('navbar');

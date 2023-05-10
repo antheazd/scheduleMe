@@ -3,7 +3,8 @@ ul {
   margin: 0;
   padding: 0;
 }
-.half_page{
+
+.half_page {
   width: 40%;
   margin: 0;
   position: absolute;
@@ -13,16 +14,16 @@ ul {
   transform: translate(-50%, -50%);
 }
 
-.full_page{
-  width: 100%; 
-  height: 90%; 
+.full_page {
+  width: 100%;
+  height: 90%;
 }
 
-.display{
+.display {
   display: block;
 }
 
-.chat_container{
+.chat_container {
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -31,7 +32,7 @@ ul {
   min-height: 80%;
 }
 
-.chat_message{
+.chat_message {
   max-width: 50%;
   width: fit-content;
   block-size: fit-content;
@@ -43,39 +44,39 @@ ul {
   margin-right: 1%;
 }
 
-.date{
+.date {
   padding: 0px;
-  color:#898A8A;
-  font-size: x-small; 
-  width:fit-content;
+  color: #898A8A;
+  font-size: x-small;
+  width: fit-content;
 }
 
-.profile_container{
-  width: 50%; 
-  height: 50%; 
+.profile_container {
+  width: 50%;
+  height: 50%;
   margin: 0;
   position: absolute;
   top: 20%;
   left: 5%;
 }
 
-.location_container{
-  width: 40%; 
-  height: 50%; 
+.location_container {
+  width: 40%;
+  height: 50%;
   margin: 0;
   position: absolute;
   top: 20%;
   right: 2%;
 }
 
-.chat_input{
+.chat_input {
   width: 100%;
   height: 8%;
   position: fixed;
   bottom: 0;
 }
 
-.add_app_full_page{
+.add_app_full_page {
   position: relative;
   height: 100%;
   width: 100%;
@@ -83,8 +84,8 @@ ul {
 }
 
 .add_app {
-  width: 60%; 
-  height: 50%; 
+  width: 60%;
+  height: 50%;
   margin: 0;
   position: absolute;
   top: 50%;
@@ -100,8 +101,8 @@ ul {
 
 }
 
-.table_div{
-  width:80%;
+.table_div {
+  width: 80%;
   height: 75%;
   margin: auto;
   position: absolute;
@@ -111,8 +112,8 @@ ul {
   overflow-y: auto;
 }
 
-.payments_div{
-  width:80%;
+.payments_div {
+  width: 80%;
   height: 75%;
   margin: auto;
   position: absolute;
@@ -120,10 +121,10 @@ ul {
   left: 50%;
   transform: translate(-50%, -50%);
   overflow-y: scroll;
-  overflow-x:hidden
+  overflow-x: hidden
 }
 
-.appointment_time{
+.appointment_time {
   text-align: center;
   position: relative;
   top: 40%;
@@ -132,7 +133,7 @@ ul {
   transform: translateY(-50%);
 }
 
-.separator_time{
+.separator_time {
   position: absolute;
   left: 20%;
   right: 20%;
@@ -149,7 +150,7 @@ table.customTable {
   color: #000000;
   table-layout: fixed;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  border:1px solid black;
+  border: 1px solid black;
   border-collapse: collapse;
   border-radius: 0.5em;
   overflow: hidden;
@@ -157,7 +158,8 @@ table.customTable {
 
 }
 
-table.customTable td, table.customTable th {
+table.customTable td,
+table.customTable th {
   border-width: 0.5px;
   border-style: solid;
   padding: 5px;
@@ -169,7 +171,7 @@ table.customTable thead {
   color: #FFFFFF;
 }
 
-td.time{
+td.time {
   background-color: #2185d0;
   color: #FFFFFF;
   border-width: 0.5px;
@@ -179,13 +181,13 @@ td.time{
   text-align: center;
 }
 
-div.appointment{
+div.appointment {
   background-color: #2185d0;
   color: #FFFFFF;
   border-style: solid;
   text-align: center;
   width: 12.5%;
-  height: 13.32%; 
+  height: 13.32%;
   right: 12.5%;
   top: 6.66%;
   background-color: #898A8A;
@@ -207,28 +209,30 @@ div.appointment{
   display: block;
 }
 
-.separator{
+.separator {
   background-color: #e0e1e2;
   font-size: 0.5vw;
   color: #3a4144;
   z-index: 2;
 }
 
-.blue{
+.blue {
   background-color: #2185d0;
 }
-.ui.celled.fixed.single.line.table{
+
+.ui.celled.fixed.single.line.table {
   text-align: center;
 }
 
-.ui.center.aligned.container{
+.ui.center.aligned.container {
   margin: auto;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.ui.pagination.menu{
+
+.ui.pagination.menu {
   position: relative;
   left: 50%;
   transform: translateX(-50%);

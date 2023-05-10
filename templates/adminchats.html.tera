@@ -1,12 +1,12 @@
 {% extends "adminbase" %}
 {% block content %}
 
+<div id="inbox"></div>
+
 <script>
     var users = {{ users }};
     var other_users = {{ other_users }};
 </script>
-
-<div id="inbox"></div>
 
 <script src="static/adminComponents/inbox.js" type="text/babel"></script>
 {% endblock content %}

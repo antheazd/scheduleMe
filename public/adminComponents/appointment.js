@@ -12,20 +12,20 @@ class Appointment extends React.Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  componentDidUpdate(){
-    if(this.props.extra_weeks != this.state.extra_weeks){
-      this.setState({extra_weeks: this.props.extra_weeks});
+  componentDidUpdate() {
+    if (this.props.extra_weeks != this.state.extra_weeks) {
+      this.setState({ extra_weeks: this.props.extra_weeks });
       this.check_visibility();
     }
   }
 
-  check_visibility(){
+  check_visibility() {
     var extra_days = Number(this.extra_days());
-    if((extra_days >= 0) && (extra_days < 7)) {
-      this.setState({appointment_display: true});
+    if ((extra_days >= 0) && (extra_days < 7)) {
+      this.setState({ appointment_display: true });
     }
-    else{
-      this.setState({appointment_display: false});
+    else {
+      this.setState({ appointment_display: false });
     }
   }
 
@@ -33,17 +33,17 @@ class Appointment extends React.Component {
     var monday = new Date();
     monday.setDate(monday.getDate() + (((1 - monday.getDay()) % 7) || 7) + (this.props.extra_weeks * 7));
     var day = new Date(this.props.day);
-    if((day.getMonth() != monday.getMonth()) || (day.getFullYear() != monday.getFullYear())) return -1;
+    if ((day.getMonth() != monday.getMonth()) || (day.getFullYear() != monday.getFullYear())) return -1;
     return day.getDate() - monday.getDate();
   }
 
   right() {
-    var days = (6 - this.extra_days(this.props.day)) *  12.49 + 0.02;
+    var days = (6 - this.extra_days(this.props.day)) * 12.49 + 0.02;
     return days + '%';
   }
 
   appointment_height() {
-    switch(this.props.duration){
+    switch (this.props.duration) {
       case "45min":
         return 0.75 * 8 + '%';
       case "1h":
@@ -93,72 +93,72 @@ class Appointment extends React.Component {
     return end_hour + ':' + zero + end_minute;
   }
 
-  location_link(){
+  location_link() {
     var alt = Number(this.props.alt);
     var lng = Number(this.props.lng);
     return "https://maps.google.com/?q=" + alt + "," + lng;
-}
+  }
 
-  updateState(){ 
-    this.setState({display: !this.state.display});
+  updateState() {
+    this.setState({ display: !this.state.display });
   }
 
   render() {
     return (
       <div>
-        {this.state.appointment_display?
-            <div onClick={this.updateState} className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}>{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}<br></br>{this.props.name} {this.props.surname}</div>
-        :null }
+        {this.state.appointment_display ?
+          <div onClick={this.updateState} className="ui visible message" style={{ height: this.appointment_height(), right: this.right(), top: this.top() }}>{this.start_time()} - {this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}<br></br>{this.props.name} {this.props.surname}</div>
+          : null}
 
-        {this.state.display 
-            ? <div className="ui center aligned container">
-                <div className="half_page">
-                <div className="ui attached message" style={{ zIndex : "200" }}>
+        {this.state.display
+          ? <div className="ui center aligned container">
+            <div className="half_page">
+              <div className="ui attached message" style={{ zIndex: "200" }}>
                 <div className="content">
-                <i class="close icon" onClick={this.updateState}></i>
-                <div className="header">{ this.props.kind }</div>
-                    <p>{ this.props.name } { this.props.surname }</p></div></div>
-                    <form className="ui form attached fluid segment" method="post">
-                        <div className="equal width fields">
+                  <i class="close icon" onClick={this.updateState}></i>
+                  <div className="header">{this.props.kind}</div>
+                  <p>{this.props.name} {this.props.surname}</p></div></div>
+              <form className="ui form attached fluid segment" method="post">
+                <div className="equal width fields">
 
-                            <div className="field">
-                            <label>Date</label>
-                                { this.props.day}
-                            </div>
+                  <div className="field">
+                    <label>Date</label>
+                    {this.props.day}
+                  </div>
 
-                            <div className="field">
-                            <label>Time</label>
-                            { this.start_time() }-{ this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute) }
-                            </div>
+                  <div className="field">
+                    <label>Time</label>
+                    {this.start_time()}-{this.end_time(this.props.duration, this.props.start_hour, this.props.start_minute)}
+                  </div>
 
-                            <div className="field">
-                                <label>Duration</label>
-                                { this.props.duration }
-                            </div>
-                        </div>
+                  <div className="field">
+                    <label>Duration</label>
+                    {this.props.duration}
+                  </div>
+                </div>
 
-                    <div className="equal width fields">
+                <div className="equal width fields">
 
-                            <div className="field">
-                                <label>Price</label>
-                                { this.props.price } €
-                            </div>
+                  <div className="field">
+                    <label>Price</label>
+                    {this.props.price} €
+                  </div>
 
-                            <div className="field">
-                              <label>Location</label>
-                                <a href={ this.location_link() }>Location</a>
-                            </div>
+                  <div className="field">
+                    <label>Location</label>
+                    <a href={this.location_link()}>Location</a>
+                  </div>
 
-                        </div>
+                </div>
 
-                    </form>
-                    </div>
-                
-              </div>
+              </form>
+            </div>
 
-            : null
-            }
-      
+          </div>
+
+          : null
+        }
+
       </div>
     );
   }

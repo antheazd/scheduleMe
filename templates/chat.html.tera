@@ -2,6 +2,7 @@
 {% block content %}
 
 <div id="chat"></div>
+
 <script>
     var context = {{ messages }};
 </script>
