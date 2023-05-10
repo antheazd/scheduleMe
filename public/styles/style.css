@@ -108,7 +108,19 @@ ul {
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  overflow-y:auto;
+  overflow-y: auto;
+}
+
+.payments_div{
+  width:80%;
+  height: 75%;
+  margin: auto;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+  overflow-x:hidden
 }
 
 table.customTable {

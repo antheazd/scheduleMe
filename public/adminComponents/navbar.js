@@ -14,9 +14,7 @@ class Navbar extends React.Component {
         <a className="item" href="/adminpayments">Payments</a>
         <div className="right menu">
           <a className="active item" href="/adminprofile">Profile</a>
-          <a className="item" href="/adminlogout">
-            <button className="ui primary button" type="submit">Log out</button>
-          </a>
+          <Button href="/adminlogout" label="Log out" />
         </div>
       </div>
     );}

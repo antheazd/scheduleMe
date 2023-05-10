@@ -15,11 +15,11 @@
     </div>
 </div>
 
-<script src="/static/userComponents/add_appointment.js" type="text/babel"></script>
+<script src="/static/userComponents/addAppointment.js" type="text/babel"></script>
 <script src="/static/sharedComponents/table.js" type="text/babel"></script>
-<script src="/static/sharedComponents/beforeSeparator.js" type="text/babel"></script>
-<script src="/static/sharedComponents/afterSeparator.js" type="text/babel"></script>
-<script src="/static/sharedComponents/appointment.js" type="text/babel"></script>
+<script src="/static/userComponents/beforeSeparator.js" type="text/babel"></script>
+<script src="/static/userComponents/afterSeparator.js" type="text/babel"></script>
+<script src="/static/userComponents/appointment.js" type="text/babel"></script>
 <script src="/static/userComponents/schedule.js" type="text/babel"></script>
 {% endblock content %}
 
