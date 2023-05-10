@@ -41,7 +41,7 @@ class Inbox extends React.Component {
             <i class="close icon" onClick={this.updateState}></i>
               <div className="content">
                 <div className="header">Start a new chat!</div></div></div>
-                <form className="ui form attached fluid segment" method="post">
+                <form className="ui form attached fluid segment" method="post" style={{ overflowY: "scroll", overflowX:"hidden" }}>
                 <div className="equal width fields" style={{ display: "inline-block"}}>
                 {window.other_users.map(i => 
                     <div key={i.user_id} className="field">

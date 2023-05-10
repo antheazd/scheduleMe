@@ -34,8 +34,8 @@ pub async fn indexget(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     Err(Redirect::to(uri!(login())))
 }
 
-#[get("/userprofile")]
-pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
+#[get("/profile")]
+pub async fn profile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> Result<Template, Redirect> {
     match cookies.get_private("id"){
         Some(id) => {
 
@@ -65,7 +65,7 @@ pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> R
             
             info.push(context_str);
 
-            return Ok(Template::render("userprofile", context! {context: info}))
+            return Ok(Template::render("profile", context! {context: info}))
         }
         None => {
             return Err(Redirect::to(uri!(login())))
@@ -73,8 +73,8 @@ pub async fn userprofile(cookies: &CookieJar<'_>, mut db: Connection<Logs>) -> R
     }
 }
 
-#[post("/userprofile", data = "<location>")]
-pub async fn userprofilepost(location: Form<location::Location>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
+#[post("/profile", data = "<location>")]
+pub async fn profilepost(location: Form<location::Location>, mut db: Connection<Logs>, cookies: &CookieJar<'_>) -> Result<Redirect, Template>{
     let mut id_cookie = cookies.get_private("id");
     match id_cookie {
         Some(id) => {
@@ -123,13 +123,13 @@ pub async fn userprofilepost(location: Form<location::Location>, mut db: Connect
                 Err(err) => {
                     println!("{}", err.to_string());
 
-                    return Err(Template::render("userprofile", context! {})) 
+                    return Err(Template::render("profile", context! {})) 
                 }
             }
             }
         
     None => {
-            return Err(Template::render("userprofile", context! {}))
+            return Err(Template::render("profile", context! {}))
         }
     }
 }
@@ -556,7 +556,7 @@ let existing_users = sqlx::query(r#"SELECT COUNT(id) AS count FROM users WHERE e
 
     if success {
         return 
-        Ok(Redirect::to(uri!(userprofile)));
+        Ok(Redirect::to(uri!(profile)));
     }
 
     Err(Template::render("signup", context! {
@@ -584,7 +584,7 @@ pub async fn location_post(location: Form<location::Location>, mut db: Connectio
                 .execute(&mut *db)
                 .await;
 
-            return Redirect::to(uri!(userprofile));
+            return Redirect::to(uri!(profile));
             }
         
     None => {

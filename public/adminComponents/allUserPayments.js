@@ -21,7 +21,7 @@ class Payments extends React.Component {
         <button className="ui large button center" onClick={this.updateState}>Check payments for user</button>
         </div>
 
-        <div className="half_page">
+        <div className="payments_div">
         <table className="ui top attached basic table">
           <thead className="">
             <tr className="">
@@ -50,7 +50,7 @@ class Payments extends React.Component {
             <i className="close icon" onClick={this.updateState}></i>
               <div className="content">
                 <div className="header">Check payments for user</div></div></div>
-                <form className="ui form attached fluid segment" method="post">
+                <form className="ui form attached fluid segment" method="post" style={{ display: "inline-block", overflowY: "scroll", overflowX:"hidden"}}>
                 <div className="equal width fields" style={{ display: "inline-block"}}>
                 {window.users.map(i => 
                     <div key={i.id} className="field">

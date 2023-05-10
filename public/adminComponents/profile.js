@@ -33,6 +33,6 @@ class AdminProfile extends React.Component {
     }
 }
 
-let container = document.getElementById('adminprofile');
+let container = document.getElementById('profile');
 const root = ReactDOM.createRoot(container);
 root.render(<AdminProfile />);

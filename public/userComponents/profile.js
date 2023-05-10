@@ -77,6 +77,6 @@ class Profile extends React.Component {
     }
 }
 
-let container = document.getElementById('userprofile');
+let container = document.getElementById('profile');
 const root = ReactDOM.createRoot(container);
 root.render(<Profile />);

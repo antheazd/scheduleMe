@@ -13,10 +13,8 @@ class Navbar extends React.Component {
         <a className="item" href="/chat">Chat</a>
         <a className="item" href="/payments">Payments</a>
         <div className="right menu">
-          <a className="active item" href="/userprofile">Profile</a>
-          <a className="item" href="/logout">
-            <button className="ui primary button" type="submit">Log out</button>
-          </a>
+          <a className="active item" href="/profile">Profile</a>
+            <Button href="logout" label="Log out" />
         </div>
       </div>
     );}
