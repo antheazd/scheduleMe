@@ -1,4 +1,4 @@
-use crate::components::admin;
+use crate::components::admin::{self};
 use crate::components::appointment::{self as appointment};
 use crate::components::message::Message;
 use rocket::form::Form;
@@ -209,7 +209,8 @@ pub async fn adminloginfn(
             let surname: Option<String> = data.get("surname");
             let email: String = data.get("email");
             let password: String = data.get("password");
-            if password == admin.get_password().as_str() {
+
+            if password == admin.get_password().to_string() {
                 println!("Success");
                 _message = "Success".to_string();
 
@@ -648,3 +649,5 @@ pub async fn set_as_paid(
         }
     }
 }
+
+

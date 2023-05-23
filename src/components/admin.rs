@@ -7,6 +7,7 @@ pub struct Admin {
     surname: Option<String>,
     email: String,
     password: String,
+    phone: Option<String>
 }
 
 impl Admin {
@@ -25,12 +26,16 @@ impl Admin {
     pub fn get_password(&self) -> &String {
         &self.password
     }
+    pub fn get_phone(&self) -> &Option<String> {
+        &self.phone
+    }
     pub fn new(
         id: Option<i64>,
         name: Option<String>,
         surname: Option<String>,
         email: String,
         password: String,
+        phone: Option<String>
     ) -> Admin {
         Admin {
             id,
@@ -38,6 +43,7 @@ impl Admin {
             surname,
             email,
             password,
+            phone
         }
     }
 }

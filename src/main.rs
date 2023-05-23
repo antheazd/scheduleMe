@@ -4,11 +4,13 @@
 extern crate rocket;
 mod admin_functions;
 mod components;
+mod dtos;
 mod user_functions;
+mod sql_functions;
 use crate::components::shared_functions::Logs;
 use admin_functions::{
     add_admin_message, adminchat, adminchats, adminlogin, adminloginfn, adminlogout, adminpanel,
-    adminpanelget, adminpayments, adminprofile, set_as_paid, user_payments,
+    adminpanelget, adminpayments, adminprofile, set_as_paid, user_payments
 };
 use rocket::fs::{relative, FileServer};
 use rocket_db_pools::Database;
@@ -17,7 +19,7 @@ use std::env;
 use user_functions::{
     add_appointment, add_payment, add_user_message, chat, index, indexget, location_get,
     location_post, login, loginfn, logout, not_found, payments, profile, profilepost, schedule,
-    signup, signupfn,
+    signup, signupfn
 };
 
 #[launch]

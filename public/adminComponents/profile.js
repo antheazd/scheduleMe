@@ -3,6 +3,13 @@
 class AdminProfile extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      id: 0,
+      name: '',
+      surname: '',
+      email: '',
+      phone: ''
+    };
   }
 
   render() {

@@ -1,24 +1,26 @@
-use serde::{Deserialize, Serialize};
-use std::hash::{Hash, Hasher};
+use serde::{Serialize, Deserialize};
 
 #[derive(FromForm, Debug, Serialize, Deserialize, Clone)]
-pub struct Appointment {
-    id: Option<i64>,
-    user_id: Option<i64>,
+pub struct AppointmentLocation {
+    id: i64,
+    user_id: i64,
     day: String,
     start_hour: i32,
     start_minute: i32,
     duration: String,
     kind: String,
-    price: Option<f32>,
-    paid: bool
+    price: f32,
+    paid: bool,
+    description: String,
+    alt: f64,
+    lng: f64
 }
 
-impl Appointment {
-    pub fn get_id(&self) -> &Option<i64> {
+impl AppointmentLocation {
+    pub fn get_id(&self) -> &i64 {
         &self.id
     }
-    pub fn get_user_id(&self) -> &Option<i64> {
+    pub fn get_user_id(&self) -> &i64 {
         &self.user_id
     }
     pub fn get_day(&self) -> &String {
@@ -36,22 +38,34 @@ impl Appointment {
     pub fn get_kind(&self) -> &String {
         &self.kind
     }
-    pub fn get_price(&self) -> &Option<f32> {
+    pub fn get_price(&self) -> &f32 {
         &self.price
     }
     pub fn get_paid(&self) -> &bool {
         &self.paid
     }
+    pub fn get_description(&self) -> &String {
+        &self.description
+    }
+    pub fn get_alt(&self) -> &f64 {
+        &self.alt
+    }
+    pub fn get_lng(&self) -> &f64 {
+        &self.lng
+    }
     pub fn new(
-        id: Option<i64>,
-        user_id: Option<i64>,
+        id: i64,
+        user_id: i64,
         day: String,
         start_hour: i32,
         start_minute: i32,
         duration: String,
         kind: String,
-        price: Option<f32>,
-        paid: bool
+        price: f32,
+        paid: bool,
+        description: String,
+        alt: f64,
+        lng: f64
     ) -> Self {
         Self {
             id,
@@ -62,7 +76,10 @@ impl Appointment {
             duration,
             kind,
             price,
-            paid
+            paid,
+            description,
+            alt,
+            lng
         }
     }
 }
