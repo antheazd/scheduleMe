@@ -12,9 +12,10 @@ use rocket_dyn_templates::Template;
 use sqlx::types::chrono::{DateTime, Utc};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use crate::components::shared_functions::create_cookies;
+use crate::sql_functions::user::user_location_info;
 use crate::components::shared_functions::remove_cookies;
 use crate::components::shared_functions::Logs;
+use crate::components::shared_functions::create_cookies;
 
 #[catch(404)]
 pub fn not_found() -> Template {
