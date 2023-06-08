@@ -19,6 +19,11 @@ class Appointment extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({ extra_weeks: this.props.extra_weeks });
+    this.check_visibility();
+  }
+
   check_visibility() {
     var extra_days = Number(this.extra_days());
     if ((extra_days >= 0) && (extra_days < 7)) {
@@ -111,11 +116,11 @@ class Appointment extends React.Component {
           : null}
 
         {this.state.display
-          ? <div className="ui center aligned container">
+          ? <div className="ui center aligned container top">
             <div className="half_page">
               <div className="ui attached message" style={{ zIndex: "200" }}>
                 <div className="content">
-                  <i class="close icon" onClick={this.updateState}></i>
+                  <i className="close icon" onClick={this.updateState}></i>
                   <div className="header">{this.props.kind}</div>
                   <p>{this.props.name} {this.props.surname}</p></div></div>
               <form className="ui form attached fluid segment" method="post">

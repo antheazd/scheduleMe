@@ -9,7 +9,7 @@ pub struct UserLocation {
     email: String,
     description: String,
     alt: f64,
-    lng: f64
+    lng: f64,
 }
 
 impl UserLocation {
@@ -46,7 +46,7 @@ impl UserLocation {
         email: String,
         description: String,
         alt: f64,
-        lng: f64
+        lng: f64,
     ) -> Self {
         Self {
             user_id,
@@ -56,7 +56,7 @@ impl UserLocation {
             email,
             description,
             alt,
-            lng
+            lng,
         }
     }
 }

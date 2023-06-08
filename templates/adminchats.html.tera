@@ -3,10 +3,6 @@
 
 <div id="inbox"></div>
 
-<script>
-    var users = {{ users }};
-    var other_users = {{ other_users }};
-</script>
-
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
 <script src="static/adminComponents/inbox.js" type="text/babel"></script>
 {% endblock content %}

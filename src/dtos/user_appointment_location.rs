@@ -16,7 +16,7 @@ pub struct UserAppointmentLocation {
     paid: bool,
     description: String,
     alt: f64,
-    lng: f64
+    lng: f64,
 }
 
 impl UserAppointmentLocation {
@@ -76,7 +76,7 @@ impl UserAppointmentLocation {
         paid: bool,
         description: String,
         alt: f64,
-        lng: f64
+        lng: f64,
     ) -> Self {
         Self {
             id,
@@ -92,7 +92,7 @@ impl UserAppointmentLocation {
             paid,
             description,
             alt,
-            lng
+            lng,
         }
     }
 }

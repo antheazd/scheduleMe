@@ -11,7 +11,7 @@ pub struct Appointment {
     duration: String,
     kind: String,
     price: Option<f32>,
-    paid: bool
+    paid: bool,
 }
 
 impl Appointment {
@@ -51,7 +51,7 @@ impl Appointment {
         duration: String,
         kind: String,
         price: Option<f32>,
-        paid: bool
+        paid: bool,
     ) -> Self {
         Self {
             id,
@@ -62,7 +62,7 @@ impl Appointment {
             duration,
             kind,
             price,
-            paid
+            paid,
         }
     }
 }

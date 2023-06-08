@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(FromForm, Debug, Serialize, Deserialize, Clone)]
 pub struct AppointmentLocation {
@@ -13,7 +13,7 @@ pub struct AppointmentLocation {
     paid: bool,
     description: String,
     alt: f64,
-    lng: f64
+    lng: f64,
 }
 
 impl AppointmentLocation {
@@ -65,7 +65,7 @@ impl AppointmentLocation {
         paid: bool,
         description: String,
         alt: f64,
-        lng: f64
+        lng: f64,
     ) -> Self {
         Self {
             id,
@@ -79,7 +79,7 @@ impl AppointmentLocation {
             paid,
             description,
             alt,
-            lng
+            lng,
         }
     }
 }

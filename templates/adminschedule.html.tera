@@ -1,21 +1,9 @@
 {% extends "adminbase" %}
 {% block content %}
 
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8&callback=initMap">
-</script>
+<div id="schedule"></div>
 
-<div class="full_page">
-    <div id="table">
-        <div id="schedule"></div>
-    </div>
-</div>
-
-<script>
-    var appointments = {{ appointments }};
-    var users = {{ users }};
-</script>
-
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
 <script src="static/sharedComponents/table.js" type="text/babel"></script>
 <script src="static/adminComponents/appointment.js" type="text/babel"></script>
 <script src="static/adminComponents/schedule.js" type="text/babel"></script>

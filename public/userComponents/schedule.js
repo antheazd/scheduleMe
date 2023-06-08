@@ -6,7 +6,10 @@ class Schedule extends React.Component {
         super();
         this.state = {
             extra_weeks: 0,
-            appointments: [{}]
+            appointments: {},
+            apps: [],
+            location: {},
+            loading: true
         };
         this.nextWeek = this.nextWeek.bind(this);
         this.previousWeek = this.previousWeek.bind(this);
@@ -40,35 +43,60 @@ class Schedule extends React.Component {
                 end += 120;
         }
 
-        let apps = this.state.appointments;
-        apps.push({ "day": day, "start": start, "end": end });
+        let appointments = this.state.apps;
+        appointments.push({ "day": day, "start": start, "end": end });
 
         this.setState({
-            appointments: apps
+            apps: appointments
         });
     }
 
+    componentDidMount() {
+        axios.get('http://localhost:8000/schedule_appointments').then(resp => {
+            this.setState({ appointments: resp });
+        }).catch(error => {
+            console.log(error);
+        });
+        axios.get('http://localhost:8000/user_location').then(resp => {
+            this.setState({ location: resp.data });
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    componentDidUpdate() {
+        if (this.state.appointments !== undefined && this.state.loading) {
+            this.setState({ loading: false });
+        }
+    }
+
     render() {
+        const appointments = this.state.appointments.data;
+        const loading = this.state.loading;
         return (
             <div>
-                <div aria-label="Pagination Navigation" role="navigation" className="ui pagination menu">
-                    <a aria-current="false" aria-disabled="false" tabIndex="0" value="1" aria-label="Previous item" type="prevItem" className="item" onClick={this.previousWeek}>⟨</a>
-                    <a aria-current="false" aria-disabled="false" tabIndex="0" value="2" aria-label="Next item" type="nextItem" className="item" onClick={this.nextWeek}>⟩</a>
-                </div>
-                <div className="table_div">
-                    <Table extra_weeks={this.state.extra_weeks} />
-                    <br></br>
-                    <ul>
-                        {window.context.map(i =>
-                            <div key={i.appointment_id}>
-                                <Appointment extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} add_appointment={this.add_appointment} />
-                            </div>
-                        )}
-                    </ul>
-                </div>
-                <br></br>
-                <AddAppointment appointments={this.state.appointments} />
-                <br></br>
+                {!loading ?
+                    <div>
+                        <div aria-label="Pagination Navigation" role="navigation" className="ui pagination menu">
+                            <a aria-current="false" aria-disabled="false" tabIndex="0" value="1" aria-label="Previous item" type="prevItem" className="item" onClick={this.previousWeek}>⟨</a>
+                            <a aria-current="false" aria-disabled="false" tabIndex="0" value="2" aria-label="Next item" type="nextItem" className="item" onClick={this.nextWeek}>⟩</a>
+                        </div>
+                        <div className="table_div">
+                            <Table extra_weeks={this.state.extra_weeks} />
+                            <br></br>
+                            <ul>
+                                {appointments.map(i =>
+                                    <div key={i.id}>
+                                        <Appointment extra_weeks={this.state.extra_weeks} start_hour={i.start_hour} start_minute={i.start_minute} duration={i.duration} alt={i.alt} lng={i.lng} day={i.day} add_appointment={this.add_appointment} location={this.state.location} />
+                                    </div>
+                                )}
+                            </ul>
+                        </div>
+                        <br></br>
+                        <AddAppointment appointments={this.state.appointments} />
+                        <br></br>
+                    </div>
+                    : <Loading />}
             </div>
         )
     }

@@ -7,7 +7,7 @@ pub struct Message {
     admin_id: Option<i64>,
     created: Option<i64>,
     content: String,
-    is_admin: Option<bool>
+    is_admin: Option<bool>,
 }
 
 impl Message {
