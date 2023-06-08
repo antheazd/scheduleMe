@@ -3,7 +3,10 @@
 class AddAppointment extends React.Component {
   constructor() {
     super();
-    this.state = { visibility: false }
+    this.state = {
+      visibility: false,
+      ordered_users: {}
+    }
     this.updateState = this.updateState.bind(this)
   }
 
@@ -16,7 +19,16 @@ class AddAppointment extends React.Component {
     }
   }
 
+  componentDidMount() {
+    axios.get('http://localhost:8000/ordered_users').then(resp => {
+      this.setState({ ordered_users: resp });
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
   render() {
+    const users = this.state.ordered_users.data;
     return (
       <div>
         <div className="center"><button className="ui basic button" onClick={this.updateState} style={{ margin: "4px" }}>Add appointment</button></div>
@@ -148,11 +160,14 @@ class AddAppointment extends React.Component {
                 <div className="equal width fields">
                   <div className="field">
                     <label>User</label>
-                    <select id="id" name="id">
-                      {window.users.map(it =>
-                        <option key={it.users_id} value={it.users_id}>{it.name} {it.surname}</option>
-                      )}
-                    </select>
+                    {users !== undefined ?
+                      <select id="id" name="id">
+                        {users.map(it =>
+                          <option key={it.id} value={it.id}>{it.name} {it.surname}</option>
+                        )}
+                      </select>
+                      : <Loading />
+                    }
                   </div>
                 </div>
 

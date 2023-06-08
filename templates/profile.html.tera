@@ -3,9 +3,6 @@
 
 <div id="profile"></div>
 
-<script>
-    var context = {{ context }};
-</script>
-
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
 <script type="text/babel" src="static/userComponents/profile.js"></script>
 {% endblock content %}

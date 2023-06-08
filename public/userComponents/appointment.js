@@ -9,15 +9,22 @@ class Appointment extends React.Component {
       before_separator_display: false,
       after_separator_display: false,
       appointment_display: false,
-      extra_weeks: 0
+      extra_weeks: 0,
+      location: {}
     };
     this.callback = this.callback.bind(this);
+    this.updateDistance = this.updateDistance.bind(this);
   }
 
   componentDidUpdate() {
     if (this.props.extra_weeks != this.state.extra_weeks) {
       this.setState({ extra_weeks: this.props.extra_weeks });
       this.check_visibility();
+    }
+    if (this.props.location != this.state.location) {
+      this.setState({ location: this.props.location });
+      this.check_visibility();
+      this.updateDistance();
     }
   }
 
@@ -36,7 +43,7 @@ class Appointment extends React.Component {
     if (this.props.start_hour == 8) {
       this.setState({ before_separator_display: false });
     }
-    if (Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))) {
+    if ((this.props.location !== undefined) && (Number((this.props.location.alt) == Number(this.props.alt)) && (Number(this.props.location.lng) == Number(this.props.lng)))) {
       this.setState({ before_separator_display: false });
       this.setState({ after_separator_display: false });
     }
@@ -45,15 +52,15 @@ class Appointment extends React.Component {
     }
   }
 
-  componentDidMount() {
-
+  updateDistance() {
     this.setState({ extra_weeks: this.props.extra_weeks });
     this.check_visibility();
+    if (isNaN(this.props.location.alt) || isNaN(this.props.location.lng) || isNaN(this.props.alt) || isNaN(this.props.lng)) return;
 
-    const destination = new google.maps.LatLng(Number(window.coordinates[0].alt), Number(window.coordinates[0].lng));
+    const destination = new google.maps.LatLng(Number(this.props.location.alt), Number(this.props.location.lng));
     const origin = new google.maps.LatLng(Number(this.props.alt), Number(this.props.lng));
 
-    if (Number((window.coordinates[0].alt) == Number(this.props.alt)) && (Number(window.coordinates[0].lng) == Number(this.props.lng))) {
+    if (Number((this.props.location.alt) == Number(this.props.alt)) && (Number(this.props.location.lng) == Number(this.props.lng))) {
       this.setState({ before_separator_display: false });
       this.setState({ after_separator_display: false });
       this.props.add_appointment(this.props.day, this.props.start_hour, this.props.start_minute, this.props.duration, this.state.duration);
@@ -82,6 +89,11 @@ class Appointment extends React.Component {
     } else {
       console.error('Error:', status);
     }
+  }
+
+  componentDidMount() {
+    this.updateDistance();
+    this.check_visibility();
   }
 
   extra_days() {

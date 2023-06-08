@@ -10,11 +10,7 @@
     </div>
 </div>
 
-<script>
-    var context = {{ appointments }};
-    var coordinates = {{ coordinates }};
-</script>
-
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
 <script src="/static/userComponents/addAppointment.js" type="text/babel"></script>
 <script src="/static/sharedComponents/table.js" type="text/babel"></script>
 <script src="/static/userComponents/beforeSeparator.js" type="text/babel"></script>

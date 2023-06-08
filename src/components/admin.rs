@@ -7,7 +7,7 @@ pub struct Admin {
     surname: Option<String>,
     email: String,
     password: String,
-    phone: Option<String>
+    phone: Option<String>,
 }
 
 impl Admin {
@@ -35,7 +35,7 @@ impl Admin {
         surname: Option<String>,
         email: String,
         password: String,
-        phone: Option<String>
+        phone: Option<String>,
     ) -> Admin {
         Admin {
             id,
@@ -43,7 +43,7 @@ impl Admin {
             surname,
             email,
             password,
-            phone
+            phone,
         }
     }
 }

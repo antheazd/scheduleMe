@@ -9,7 +9,7 @@ class Navbar extends React.Component {
 
     return (
       <div className="ui secondary menu">
-        <a className="active item" href="/adminpanel">Schedule</a>
+        <a className="active item" href="/adminschedule">Schedule</a>
         <a className="item" href="/adminchat">Chat</a>
         <a className="item" href="/adminpayments">Payments</a>
         <div className="right menu">

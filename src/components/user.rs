@@ -8,7 +8,7 @@ pub struct User {
     phone: Option<String>,
     email: String,
     password: String,
-    description: Option<String>
+    description: Option<String>,
 }
 
 impl User {

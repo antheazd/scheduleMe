@@ -5,15 +5,14 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      alt: window.context[0].alt,
-      lng: window.context[0].lng,
-      description: window.context[0].location
+      user: {}
     }
 
     const script = document.createElement('script');
     script.src = "https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&language=hr&output=json&key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8";
     script.async = true;
-    document.body.appendChild(script);
+    document.body.appendChild(script
+    );
   }
   autocomplete() {
     let address = document.getElementById('address');
@@ -33,40 +32,55 @@ class Profile extends React.Component {
   }
 
   location_link() {
-    return "https://www.google.com/maps/embed/v1/view?key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8" + "&center=" + this.state.alt + "," + this.state.lng + "&zoom=14";
+    if (this.state.user.data !== undefined) {
+      return "https://www.google.com/maps/embed/v1/view?key=AIzaSyBL1NQunxEmWEwwsdPkxpZY9A9gqD_csl8" + "&center=" + this.state.user.data.alt + "," + this.state.user.data.lng + "&zoom=14";
+    }
+  }
+
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/user_location_info').then(resp => {
+      this.setState({ user: resp });
+      console.log(this.state.user);
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   render() {
+    const user = this.state.user.data;
     return (
       <div className="full_page">
         <div className="profile_container">
-          <div className="ui items">
-            <div className="item">
-              <div className="content">
-                <h3 className="ui header"> Name</h3><br></br>
-                {window.context[0].name} {window.context[0].surname}
-                <div className="ui hidden divider"></div>
+          {user !== undefined ?
+            <div className="ui items">
+              <div className="item">
+                <div className="content">
+                  <h3 className="ui header"> Name</h3><br></br>
+                  {user.name} {user.surname}
+                  <div className="ui hidden divider"></div>
 
-                <h3 className="ui header">Email</h3><br></br>
-                {window.context[0].email}
-                <div className="ui hidden divider"></div>
+                  <h3 className="ui header">Email</h3><br></br>
+                  {user.email}
+                  <div className="ui hidden divider"></div>
 
-                <h3 className="ui header">Phone number</h3><br></br>
-                {window.context[0].phone}
-                <div className="ui hidden divider"></div>
+                  <h3 className="ui header">Phone number</h3><br></br>
+                  {user.phone}
+                  <div className="ui hidden divider"></div>
 
-                <form className="ui form" method="post">
-                  <div className="field">
-                    <h3>Location</h3>
-                    <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder={window.context[0].location} />
-                  </div>
-                  <input type="hidden" id="alt" name="alt" />
-                  <input type="hidden" id="lng" name="lng" />
-                  <button className="ui blue button">Change location</button>
-                </form>
+                  <form className="ui form" method="post">
+                    <div className="field">
+                      <h3>Location</h3>
+                      <input type="text" id="address" name="description" onClick={this.autocomplete} placeholder={user.description} />
+                    </div>
+                    <input type="hidden" id="alt" name="alt" />
+                    <input type="hidden" id="lng" name="lng" />
+                    <button className="ui blue button">Change location</button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
+            : <Loading />}
         </div>
         <div className="location_container">
           <iframe src={this.location_link()} style={{ width: "80%", height: "100%", border: "0", allowfullscreen: "", loading: "lazy", referrerpolicy: "no-referrer-when-downgrade" }}></iframe>
