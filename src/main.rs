@@ -2,20 +2,24 @@
 #[allow(unused)]
 #[macro_use]
 extern crate rocket;
-mod admin_handlers;
+
 mod components;
 mod dtos;
 mod sql_functions;
-mod user_handlers;
+mod handlers;
+
 use crate::components::shared_functions::Logs;
+
 use crate::sql_functions::admin::*;
 use crate::sql_functions::user::*;
-use admin_handlers::*;
+
+use crate::handlers::admin::*;
+use crate::handlers::user::*;
+
 use rocket::fs::{relative, FileServer};
 use rocket_db_pools::Database;
 use rocket_dyn_templates::Template;
 use std::env;
-use user_handlers::*;
 
 #[launch]
 fn rocket() -> _ {
