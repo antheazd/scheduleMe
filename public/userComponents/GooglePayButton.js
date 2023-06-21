@@ -7,19 +7,19 @@ class GooglePayButton extends React.Component {
     this.onPaymentDataChanged = this.onPaymentDataChanged.bind(this);
     this.onPaymentError = this.onPaymentError.bind(this);
   }
+
   componentDidMount() {
     const script = document.createElement("script");
     script.src = "https://pay.google.com/gp/p/js/pay.js";
     script.async = true;
     document.body.appendChild(script);
-    console.log("loaded", this.props.id);
   }
 
   onGooglePayLoaded() { }
 
   onPaymentAuthorized(paymentData) {
     const paymentToken = paymentData.paymentMethodData.tokenizationData.token;
-    const url = "payments/" + this.props.id;
+    const url = "/payment_add/1";
     axios.post(url, {
       id: this.props.id,
       paymentToken: paymentToken

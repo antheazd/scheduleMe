@@ -1,6 +1,17 @@
 'use strict';
 
 class LoginForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      provider: false
+    }
+  }
+  componentDidMount() {
+    if (window.location.href.includes('provider')) {
+      this.setState({ provider: true });
+    }
+  }
 
   render() {
     return (
@@ -25,7 +36,7 @@ class LoginForm extends React.Component {
           <Button label="Log in" />
         </form>
         <div className="ui warning bottom attached message">
-          <i aria-hidden="true" className="help icon"></i>Don't have an account? <a href="/signup">Sign up here</a> instead.
+          <i aria-hidden="true" className="help icon"></i>Don't have an account? <a href={this.state.provider ? "/providersignup" : "/signup"}>Sign up here</a> instead.
         </div>
       </div>
 

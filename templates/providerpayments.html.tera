@@ -1,0 +1,8 @@
+{% extends "providerbase" %}
+{% block content %}
+
+<div id="payments"></div>
+
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
+<script src="/static/providerComponents/allUserPayments.js" type="text/babel"></script>
+{% endblock content %}

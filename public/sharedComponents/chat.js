@@ -22,21 +22,29 @@ class Chat extends React.Component {
 
   componentDidMount() {
     const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1, window.location.href.length);
-    if (window.location.href.includes('adminchat')) {
-      axios.get('http://localhost:8000/user_messages/' + id).then(resp => {
+    if (window.location.href.includes('providerchat')) {
+      axios.get('/user_messages/' + id).then(resp => {
         this.setState({ messages: resp });
-        console.log(resp);
       }).catch(error => {
         console.log(error);
       });
     } else {
-      axios.get('http://localhost:8000/user_chat').then(resp => {
+      axios.get('/user_chat/' + id).then(resp => {
         this.setState({ messages: resp });
-        console.log(resp);
       }).catch(error => {
         console.log(error);
       });
     }
+  }
+
+  is_received(is_provider) {
+    if (window.location.href.includes('providerchat') && is_provider) {
+      return false;
+    }
+    if (!window.location.href.includes('providerchat') && !is_provider) {
+      return false;
+    }
+    return true;
   }
 
   render() {
@@ -51,7 +59,7 @@ class Chat extends React.Component {
               <div>
                 {messages.map(i =>
                   <div key={i.id}>
-                    <Message received={i.is_admin} message={i.content} time={i.created} />
+                    <Message received={this.is_received(i.is_provider)} message={i.content} time={i.created} />
                   </div>
                 )}
               </div>

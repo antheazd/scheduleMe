@@ -22,7 +22,6 @@ class LocationForm extends React.Component {
       var longitude = place.geometry.location.lng();
       document.getElementById('alt').value = latitude;
       document.getElementById('lng').value = longitude;
-      console.log(longitude);
     });
   }
 

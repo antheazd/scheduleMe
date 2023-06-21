@@ -1,4 +1,4 @@
-pub mod admin;
+pub mod provider;
 pub mod appointment;
 pub mod location;
 pub mod message;

@@ -4,7 +4,7 @@ use crate::components::message::Message;
 use crate::components::response::Response;
 use crate::components::shared_functions::Logs;
 use crate::components::shared_functions::{check_cookies, remove_cookies};
-use crate::components::user;
+use crate::components::user::*;
 use crate::sql_functions::user::*;
 use rocket::form::Form;
 use rocket::http::CookieJar;
@@ -21,16 +21,12 @@ pub fn not_found() -> Template {
 
 //Index
 #[get("/")]
-pub fn index_get(cookies: &CookieJar<'_>) -> Redirect {
-    if cookies.get_private("id").is_some() {
-        return Redirect::to(uri!(schedule_get()));
-    }
-
-    return Redirect::to(uri!(login_get()));
+pub fn index_get(cookies: &CookieJar<'_>) -> Template {
+    return Template::render("index", context! {});
 }
 
 //Profile
-#[get("/profile")]
+#[get("/profile/<_>")]
 pub async fn profile_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     if check_cookies(cookies) {
         return Ok(Template::render("profile", context! {}));
@@ -38,7 +34,7 @@ pub async fn profile_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect> 
     return Err(Redirect::to(uri!(login_get())));
 }
 
-#[post("/profile", data = "<location>")]
+#[post("/profile/<_>", data = "<location>")]
 pub async fn profile_post(
     location: Form<location::Location>,
     db: Connection<Logs>,
@@ -51,7 +47,7 @@ pub async fn profile_post(
 }
 
 //Chat
-#[get("/chat")]
+#[get("/chat/<_>")]
 pub async fn chat_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     if check_cookies(cookies) {
         return Ok(Template::render("chat", context! {}));
@@ -59,14 +55,15 @@ pub async fn chat_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     return Err(Redirect::to(uri!(login_get())));
 }
 
-#[post("/chat", data = "<message>")]
+#[post("/chat/<provider_id>", data = "<message>")]
 pub async fn chat_post(
     message: Form<Message>,
     db: Connection<Logs>,
     cookies: &CookieJar<'_>,
+    provider_id: i64,
 ) -> Result<Redirect, Template> {
-    match message_add(message.into_inner(), db, cookies).await {
-        Response::Success => return Ok(Redirect::to(uri!(chat_get()))),
+    match message_add(message.into_inner(), db, cookies, provider_id).await {
+        Response::Success => return Ok(Redirect::to(uri!(chat_get(provider_id)))),
         Response::ErrorInserting => {
             return Err(Template::render(
                 "chat",
@@ -78,8 +75,8 @@ pub async fn chat_post(
 }
 
 //Schedule
-#[get("/schedule")]
-pub async fn schedule_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
+#[get("/schedule/<provider_id>")]
+pub async fn schedule_get(cookies: &CookieJar<'_>, provider_id: i64) -> Result<Template, Redirect> {
     match check_cookies(cookies) {
         true => {
             return Ok(Template::render("schedule", context! {}));
@@ -90,13 +87,14 @@ pub async fn schedule_get(cookies: &CookieJar<'_>) -> Result<Template, Redirect>
     }
 }
 
-#[post("/schedule", data = "<appointment>")]
+#[post("/schedule/<provider_id>", data = "<appointment>")]
 pub async fn schedule_post(
     appointment: Form<appointment::Appointment>,
     db: Connection<Logs>,
     cookies: &CookieJar<'_>,
+    provider_id: i64,
 ) -> Result<Template, Redirect> {
-    match appointment_add(appointment.into_inner(), db, cookies).await {
+    match appointment_add(appointment.into_inner(), db, cookies, provider_id).await {
         Response::Success => {
             return Ok(Template::render(
                 "schedule",
@@ -114,7 +112,7 @@ pub async fn schedule_post(
 }
 
 //Payments
-#[get("/payments")]
+#[get("/payments/<_>")]
 pub async fn payments_get(
     cookies: &CookieJar<'_>,
     db: Connection<Logs>,
@@ -125,27 +123,16 @@ pub async fn payments_get(
     return Err(Redirect::to(uri!(login_get())));
 }
 
-#[post("/payments", data = "<response>")]
+#[post("/payments/<_>", data = "<response>")]
 pub async fn payments_post(
     response: String,
     db: Connection<Logs>,
     cookies: &CookieJar<'_>,
 ) -> Result<Template, Redirect> {
-    match payment_add(response, db, cookies).await {
-        Response::Success => {
-            return Ok(Template::render(
-                "payments",
-                context! {message: "Appointment paid"},
-            ))
-        }
-        Response::ErrorInserting => {
-            return Ok(Template::render(
-                "payments",
-                context! {message: "Error occured while processing request"},
-            ))
-        }
-        _ => return Err(Redirect::to(uri!(login_get()))),
+    if check_cookies(cookies) {
+        return Ok(Template::render("payments", context! {}));
     }
+    return Err(Redirect::to(uri!(login_get())));
 }
 
 //Log in
@@ -161,7 +148,7 @@ pub fn login_get() -> Template {
 
 #[post("/login", data = "<user>")]
 pub async fn login_post(
-    user: Form<user::User>,
+    user: Form<User>,
     cookies: &CookieJar<'_>,
     db: Connection<Logs>,
 ) -> Result<Redirect, Template> {
@@ -173,7 +160,7 @@ pub async fn login_post(
     )
     .await
     {
-        Response::Success => Ok(Redirect::to(uri!(schedule_get()))),
+        Response::Success => Ok(Redirect::to(uri!(providers_get()))),
         Response::UserNotFound => Ok(Redirect::to(uri!(signup_get()))),
         _ => Err(Template::render(
             "login",
@@ -202,12 +189,13 @@ pub fn signup_get() -> Template {
 
 #[post("/signup", data = "<user>")]
 pub async fn signup_post(
-    user: Form<user::User>,
+    user: Form<User>,
     db: Connection<Logs>,
     cookies: &CookieJar<'_>,
 ) -> Redirect {
-    match user_add(user.into_inner(), db, cookies).await {
+    match user_add(user, db, cookies).await {
         Response::Success => Redirect::to(uri!(location_get)),
+        Response::UserExists => Redirect::to(uri!(login_get)),
         _ => Redirect::to(uri!(signup_get)),
     }
 }
@@ -225,7 +213,13 @@ pub async fn location_post(
     cookies: &CookieJar<'_>,
 ) -> Redirect {
     match location_add(db, cookies, location.into_inner()).await {
-        Response::Success => Redirect::to(uri!(schedule_get)),
+        Response::Success => Redirect::to(uri!(providers_get)),
         _ => Redirect::to(uri!(signup_get)),
     }
+}
+
+//Providers
+#[get("/providers")]
+pub async fn providers_get(cookies: &CookieJar<'_>) -> Template {
+    return Template::render("providers", context! {});
 }

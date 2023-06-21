@@ -1,0 +1,8 @@
+{% extends "providerbase" %}
+{% block content %}
+
+<div id="inbox"></div>
+
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
+<script src="/static/providerComponents/inbox.js" type="text/babel"></script>
+{% endblock content %}

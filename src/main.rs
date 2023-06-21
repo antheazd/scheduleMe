@@ -10,12 +10,14 @@ mod handlers;
 
 use crate::components::shared_functions::Logs;
 
-use crate::sql_functions::admin::*;
+use crate::sql_functions::provider::*;
 use crate::sql_functions::user::*;
 
-use crate::handlers::admin::*;
+use crate::handlers::provider::*;
 use crate::handlers::user::*;
+use crate::handlers::public::*;
 
+use handlers::public::faq_get;
 use rocket::fs::{relative, FileServer};
 use rocket_db_pools::Database;
 use rocket_dyn_templates::Template;
@@ -44,21 +46,25 @@ fn rocket() -> _ {
                 profile_get,
                 profile_post,
                 logout_get,
-                adminlogin_get,
-                adminlogin_post,
-                adminschedule_get,
-                adminschedule_post,
-                adminchats_get,
-                adminchat_get,
-                adminchat_post,
-                adminpayments_get,
-                adminpayment_get,
-                adminpayment_post,
-                adminprofile_get,
-                adminlogout_get,
+                providers_get,
+                providersignup_get,
+                providersignup_post,
+                providerlogin_get,
+                providerlogin_post,
+                providerschedule_get,
+                providerschedule_post,
+                providerchats_get,
+                providerchat_get,
+                providerchat_post,
+                providerpayments_get,
+                providerpayment_get,
+                providerpayment_post,
+                providerprofile_get,
+                providerlogout_get,
                 schedule_appointments,
                 schedule_info,
                 ordered_users,
+                ordered_users_with_location,
                 users_with_existing_chat,
                 users_without_chat,
                 user_chat,
@@ -69,7 +75,15 @@ fn rocket() -> _ {
                 user_location,
                 user_location_info,
                 user_detailed_info,
-                admin_info
+                providers_info,
+                provider_info,
+                payment_add,
+                contacts_get,
+                socialmedia_get,
+                privacypolicy_get,
+                termsofservice_get,
+                support_get,
+                faq_get
             ],
         )
         .mount("/static", FileServer::from(relative!("public")))

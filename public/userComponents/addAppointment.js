@@ -44,7 +44,6 @@ class AddAppointment extends React.Component {
 
   handleSubmit = (event) => {
     var overlap = 0;
-    console.log(this.props.appointments);
     for (let i = 0; i < this.props.appointments.length; i++) {
       overlap += this.checkOverlap(this.props.appointments[i], event);
     }

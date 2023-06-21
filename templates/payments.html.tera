@@ -4,7 +4,7 @@
 <div id="payments"></div>
 
 <script src="/static/sharedComponents/loading.js" type="text/babel"></script>
-<script src="static/userComponents/GooglePayButton.js" type="text/babel"></script>
-<script src="static/userComponents/payment.js" type="text/babel"></script>
-<script src="static/userComponents/payments.js" type="text/babel"></script>
+<script src="/static/userComponents/GooglePayButton.js" type="text/babel"></script>
+<script src="/static/userComponents/payment.js" type="text/babel"></script>
+<script src="/static/userComponents/payments.js" type="text/babel"></script>
 {% endblock content %}

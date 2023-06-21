@@ -1,0 +1,8 @@
+{% extends "providerbase" %}
+{% block content %}
+
+<div id="profile"></div>
+
+<script type="text/babel" src="/static/sharedComponents/loading.js"></script>
+<script type="text/babel" src="/static/providerComponents/profile.js"></script>
+{% endblock content %}

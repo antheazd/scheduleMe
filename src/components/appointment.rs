@@ -5,6 +5,7 @@ use std::hash::{Hash, Hasher};
 pub struct Appointment {
     id: Option<i64>,
     user_id: Option<i64>,
+    provider_id: Option<i64>,
     day: String,
     start_hour: i32,
     start_minute: i32,
@@ -20,6 +21,9 @@ impl Appointment {
     }
     pub fn get_user_id(&self) -> &Option<i64> {
         &self.user_id
+    }
+    pub fn get_provider_id(&self) -> &Option<i64> {
+        &self.provider_id
     }
     pub fn get_day(&self) -> &String {
         &self.day
@@ -45,6 +49,7 @@ impl Appointment {
     pub fn new(
         id: Option<i64>,
         user_id: Option<i64>,
+        provider_id: Option<i64>,
         day: String,
         start_hour: i32,
         start_minute: i32,
@@ -56,6 +61,7 @@ impl Appointment {
         Self {
             id,
             user_id,
+            provider_id,
             day,
             start_hour,
             start_minute,

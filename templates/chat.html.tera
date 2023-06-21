@@ -4,6 +4,6 @@
 <div id="chat"></div>
 
 <script src="/static/sharedComponents/loading.js" type="text/babel"></script>
-<script src="static/sharedComponents/message.js" type="text/babel"></script>
-<script src="static/sharedComponents/chat.js" type="text/babel"></script>
+<script src="/static/sharedComponents/message.js" type="text/babel"></script>
+<script src="/static/sharedComponents/chat.js" type="text/babel"></script>
 {% endblock content %}

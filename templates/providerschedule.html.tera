@@ -1,0 +1,11 @@
+{% extends "providerbase" %}
+{% block content %}
+
+<div id="schedule"></div>
+
+<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
+<script src="/static/sharedComponents/table.js" type="text/babel"></script>
+<script src="/static/providerComponents/appointment.js" type="text/babel"></script>
+<script src="/static/providerComponents/schedule.js" type="text/babel"></script>
+<script src="/static/providerComponents/addAppointment.js" type="text/babel"></script>
+{% endblock content %}

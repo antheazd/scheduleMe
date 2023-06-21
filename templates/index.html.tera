@@ -1,0 +1,7 @@
+{% extends "publicbase" %}
+{% block content %}
+  <div id="aboutUs"></div>
+
+  <script src="/static/publicComponents/footer.js" type="text/babel"></script>
+  <script src="/static/publicComponents/aboutUs.js" type="text/babel"></script>
+{% endblock content %}

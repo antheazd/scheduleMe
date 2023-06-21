@@ -1,8 +1,0 @@
-{% extends "adminbase" %}
-{% block content %}
-
-<div id="profile"></div>
-
-<script src="/static/sharedComponents/loading.js" type="text/babel"></script>
-<script type="text/babel" src="static/adminComponents/profile.js"></script>
-{% endblock content %}

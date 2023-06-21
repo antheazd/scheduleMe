@@ -52,7 +52,8 @@ class Schedule extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8000/schedule_appointments').then(resp => {
+        const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1, window.location.href.length);
+        axios.get('http://localhost:8000/schedule_appointments/' + id).then(resp => {
             this.setState({ appointments: resp });
         }).catch(error => {
             console.log(error);

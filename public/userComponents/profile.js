@@ -27,7 +27,6 @@ class Profile extends React.Component {
       var longitude = place.geometry.location.lng();
       document.getElementById('alt').value = latitude;
       document.getElementById('lng').value = longitude;
-      console.log(longitude);
     });
   }
 
@@ -41,7 +40,6 @@ class Profile extends React.Component {
   componentDidMount() {
     axios.get('http://localhost:8000/user_location_info').then(resp => {
       this.setState({ user: resp });
-      console.log(this.state.user);
     }).catch(error => {
       console.log(error);
     });
